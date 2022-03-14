@@ -1,7 +1,12 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.alignZero;
 
 public class Plane implements Geometry{
     final Point _q0;
@@ -51,4 +56,13 @@ public class Plane implements Geometry{
     }
 
 
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        Point p0 = ray.getP0();
+        Vector v = ray.getDir();
+        Vector n = _normal;
+
+        double nv = alignZero(n.dotProduct(v));
+        return null;
+    }
 }
