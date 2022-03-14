@@ -14,6 +14,10 @@ class VectorTest {
 
     @Test
     void testAdd() {
+        Vector v1 = new Vector(1,2,3);
+        Vector v2 = new Vector(2,3,4);
+        assertEquals( new Vector(3,5,7), v1.add(v2),"ERROR: add() wrong value"  );
+
     }
 
     @Test
@@ -32,6 +36,12 @@ class VectorTest {
 
     @Test
     void testScale() {
+        Vector v = new Vector(1,2,3);
+        // ============ Equivalence Partitions Tests ==============
+        assertEquals(new Vector(-2,-4,-6),v.scale(-2),"Error: scaling the vector is not correct");
+        // =============== Boundary Values Tests ==================
+        assertThrows(IllegalArgumentException.class, () -> v.scale(0),
+                "scale() for 0 does not throw an exception");
     }
 
     @Test
@@ -77,5 +87,16 @@ class VectorTest {
 
     @Test
     void testNormalize() {
+        Vector v = new Vector(1, 2, 3);
+        Vector u = v.normalize();
+        assertEquals( 1.0001, u.length(),0.0001,
+                "ERROR: the normalized vector is not a unit vector");
+        try { // test that the vectors are co-lined
+            v.crossProduct(u);
+            out.println("ERROR: the normalized vector is not parallel to the original one");
+        } catch (Exception e) {
+        }
+        assertTrue(v.dotProduct(u) < 0, "ERROR: the normalized vector is opposite to the original one");
+
     }
 }
