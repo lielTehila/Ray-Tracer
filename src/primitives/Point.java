@@ -5,8 +5,33 @@ import java.util.Objects;
 public class Point {
     final Double3 _xyz;
 
+    /***
+     * implement get point
+     * @return point
+     */
     public Double3 get_xyz() {
         return _xyz;
+    }
+    /***
+     * implement getX
+     * @return X
+     */
+    public double get_x() {
+        return _xyz.get_x();
+    }
+    /***
+     * implement getY
+     * @return Y
+     */
+    public double get_y() {
+        return _xyz.get_y();
+    }
+    /***
+     * implement getZ
+     * @return Z
+     */
+    public double get_z() {
+        return _xyz.get_z();
     }
 
     /**

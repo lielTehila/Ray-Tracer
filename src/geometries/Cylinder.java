@@ -16,6 +16,11 @@ public class Cylinder implements Geometry{
         return null;
     }
 
+    /***
+     * implementation of findIntersections from Geometry
+     * @param ray - ray pointing towards the graphic object
+     * @return Intersections between the ray and the geometry.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         return null;

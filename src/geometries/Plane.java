@@ -40,29 +40,39 @@ public class Plane implements Geometry{
         return _q0;
     }
 
-    /**
+    /***
      * implementation of getNormal from Geometry
-     * @param point
-     * @return
+     * @return the normal vector of the plane
      */
 
     public Vector getNormal() {
         return _normal;
     }
 
+    /***
+     * implementation of getNormal
+     * @param point point outside the grophic shape
+     * @return normal of the plane in the point
+     */
     @Override
     public Vector getNormal(Point point) {
         return getNormal();
     }
 
-
+    /***
+     * implementation of findIntersections from Geometry
+     * @param ray - ray pointing towards the graphic object
+     * @return Intersections between the ray and the geometry.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point p0 = ray.getP0();
+        /*
         Vector v = ray.getDir();
         Vector n = _normal;
+        Point p0 = ray.getP0();
 
         double nv = alignZero(n.dotProduct(v));
+         */
         return null;
     }
 }

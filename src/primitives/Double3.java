@@ -14,7 +14,27 @@ public class Double3 {
     final double d1;
     final double d2;
     final double d3;
-
+    /***
+     * implement getX
+     * @return X
+     */
+    public double get_x() {
+        return d1;
+    }
+    /***
+     * implement getY
+     * @return Y
+     */
+    public double get_y() {
+        return d2;
+    }
+    /***
+     * implement getZ
+     * @return Z
+     */
+    public double get_z() {
+        return d3;
+    }
     /**
      * Zero triad (0,0,0)
      */
