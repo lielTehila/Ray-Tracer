@@ -6,17 +6,17 @@ import primitives.Vector;
 import java.util.*;
 
 public class Sphere implements Geometry{
-    final Point point;
+    final Point center;
     final double radius;
 
     public Sphere(Point p, double r){
-        point=new Point(p.get_xyz());
+        center =new Point(p.get_xyz());
         radius= r;
     }
 
     @Override
     public Vector getNormal(Point p) {
-        Point pn = p.subtract(point);
+        Point pn = p.subtract(center);
         Vector norm = new Vector(pn.get_xyz());
         return norm.normalize();
     }
@@ -28,7 +28,14 @@ public class Sphere implements Geometry{
     @Override
     public List<Point> findIntersections(Ray ray) {
 
-        Vector u = this.point.subtract(ray.getP0());
+        Point P0 = ray.getP0();
+        //check the cae that the point is on the center
+        if (P0.equals(center)) {
+            return List.of(center.add(ray.getDir().scale(radius)));
+        }
+
+        Vector u = this.center.subtract(P0);
+
         double tm = ray.getDir().dotProduct(u);
         double d = Math.sqrt(u.lengthSquared()-Math.pow(tm,2));
         if (d>=radius)
