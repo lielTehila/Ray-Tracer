@@ -3,7 +3,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.List;
+import java.util.*;
 
 public class Sphere implements Geometry{
     final Point point;
@@ -27,6 +27,32 @@ public class Sphere implements Geometry{
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+
+        Vector u = this.point.subtract(ray.getP0());
+        double tm = ray.getDir().dotProduct(u);
+        double d = Math.sqrt(u.lengthSquared()-Math.pow(tm,2));
+        if (d>=radius)
+            return null;
+        double th = Math.sqrt(Math.pow(radius,2)-Math.pow(d,2));
+        double t1 = tm -th;
+        double t2 = tm +th;
+
+        if (t1<= 0 && t2<=0)
+            return null;
+
+        List<Point> lst=new ArrayList<Point>();
+        if (t1 >0)
+        {
+            Point cross_p = ray.getP0().add(ray.getDir().scale(t1));
+            lst.add(cross_p);
+        }
+
+        if (t2 >0)
+        {
+            Point cross_p = ray.getP0().add(ray.getDir().scale(t2));
+            lst.add(cross_p);
+        }
+
+        return lst;
     }
 }
