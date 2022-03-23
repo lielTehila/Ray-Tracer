@@ -7,22 +7,23 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 public class Plane implements Geometry{
-    final Point _q0;
-    final Vector _normal;
+    final Point q0;
+    final Vector normal;
 
     /**
      * TODO explanations here
-     * @param q0
-     * @param normal vector for the normal (will bwe normalized automatically)
-     */public Plane(Point q0, Vector normal) {
-        _q0 = q0;
-        _normal = normal.normalize();
+     * @param _q0
+     * @param _normal vector for the normal (will bwe normalized automatically)
+     */public Plane(Point _q0, Vector _normal) {
+        q0 = _q0;
+        normal = _normal.normalize();
     }
 
     public Plane(Point p1, Point p2, Point p3) {
-        _q0 =p1;
+        q0 =p1;
 //        //TODO check direction of vectors
 //        Vector U = p1.subtract(p2);
 //        Vector V = p3.subtract(p2);
@@ -33,11 +34,11 @@ public class Plane implements Geometry{
         Vector N = U.crossProduct(V);
 
         //right hand rule
-        _normal = N.normalize();;
+        normal = N.normalize();;
     }
 
     public Point getQ0() {
-        return _q0;
+        return q0;
     }
 
     /***
@@ -46,7 +47,7 @@ public class Plane implements Geometry{
      */
 
     public Vector getNormal() {
-        return _normal;
+        return normal;
     }
 
     /***
@@ -66,13 +67,44 @@ public class Plane implements Geometry{
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        /*
+
+        Vector n = normal;
         Vector v = ray.getDir();
-        Vector n = _normal;
         Point p0 = ray.getP0();
 
+        //check if the point of the ray is same to the point of the plane
+        if(q0.equals(p0)){
+            return  null;
+        }
+
+        Vector P0_Q0 = q0.subtract(p0);
+
+        //numerator of to summarise of parameter t
+        double nP0Q0  = alignZero(n.dotProduct(P0_Q0));
+
+        //check if p0 is on the plane
+        //if the dot-product among P0_Q0 and n is 0, so p0 is on the plane and there is no cross point
+        if (isZero(nP0Q0 )){
+            return null;
+        }
+
+        //denominator of to summarise of parameter t
+        //nv is 0 if n and v are orthogonal
         double nv = alignZero(n.dotProduct(v));
-         */
-        return null;
+
+        // check if ray is lying in the plane axis
+        if(isZero(nv))
+        {
+            return null;
+        }
+
+        double t= nP0Q0/nv;
+        // make sure that t is more than 0
+        if(isZero(alignZero(t)) || t<0){
+            return null;
+        }
+        Point point = ray.getPoint(t);
+
+        return List.of(point);
     }
 }

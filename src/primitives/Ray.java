@@ -2,6 +2,8 @@ package primitives;
 
 import java.util.Objects;
 
+import static primitives.Util.isZero;
+
 public class Ray {
     final private Point p0;
     final private Vector dir;
@@ -46,9 +48,16 @@ public class Ray {
 
     /***
      *
-     * @param o-object to compare
+     * @param d-object to compare
      * @return true if they are equal
      */
+    public Point getPoint(double d){
+        if(isZero(d)){
+            return p0;
+        }
+        return p0.add(dir.scale(d));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

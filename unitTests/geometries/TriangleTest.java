@@ -26,8 +26,8 @@ class TriangleTest {
                 "Bad intersection");
 
         // TC02: Against edge
-        ray = new Ray(new Point(0, 0, -2), new Vector(2, 2, 0));
-        assertEquals(List.of(new Point(1, 1, -2)), pl.findIntersections(ray),
+        ray = new Ray(new Point(0, 0, -1), new Vector(1, 1, 0));
+        assertEquals(List.of(new Point(1, 1, -1)), pl.findIntersections(ray),
                 "Wrong intersection with plane");
         assertNull(triangle.findIntersections(ray), "Bad intersection");
 
@@ -51,8 +51,8 @@ class TriangleTest {
         assertNull(triangle.findIntersections(ray), "Bad intersection");
 
         // TC13: On edge continuation
-        ray = new Ray(new Point(-2, 0, 0), new Vector(0, 1, 0));
-        assertEquals(List.of(new Point(-2, 2, 0)), pl.findIntersections(ray),
+        ray = new Ray(new Point(-2, 0, 0), new Vector(1, 1, 0));
+        assertEquals(List.of(new Point(-0.5, 1.5, 0)), pl.findIntersections(ray),
                 "Wrong intersection with plane");
         assertNull(triangle.findIntersections(ray), "Bad intersection");
 
