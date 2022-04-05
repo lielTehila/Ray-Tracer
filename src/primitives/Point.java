@@ -2,7 +2,9 @@ package primitives;
 
 import java.util.Objects;
 
-public class Point {
+public class Point{
+
+    public static final Point ZERO = new Point(0,0,0);  //origin of the axis
     final Double3 _xyz;
 
     /***
