@@ -1,5 +1,6 @@
 package primitives;
 
+import java.util.List;
 import java.util.Objects;
 
 import static primitives.Util.isZero;
@@ -66,6 +67,31 @@ public class Ray {
         return Objects.equals(p0, ray.p0) && Objects.equals(dir, ray.dir);
     }
 
+    /**
+     * find the closet point
+     * @param lst list of points
+     * @return the closet point
+     */
+    public Point findClosestPoint (List<Point> lst)
+    {
+        if (lst.isEmpty())
+            return null;
+
+        double min= p0.distance(lst.get(0));
+        Point pMin= lst.get(0);
+        lst.remove(0);
+
+        while(!lst.isEmpty()){
+            Point p=lst.get(0);
+            double length = p0.distance(p);
+            if (length<min){
+                min=length;
+                pMin = lst.get(0);
+            }
+            lst.remove(0);
+        }
+        return pMin;
+    }
     /*
     @Override
     public int hashCode() {

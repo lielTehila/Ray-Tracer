@@ -1,4 +1,4 @@
-package unittests.renderer;
+package renderer;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,12 +21,13 @@ public class RenderTests {
      */
     @Test
     public void basicRenderTwoColorTest() {
-        Scene scene = new Scene("Test scene")//
-                .setAmbientLight(new AmbientLight(new Color(255, 191, 191), //
-                        new Double3(1,1,1))) //
-                .setBackground(new Color(75, 127, 90));
 
-        scene.geometries.add(new Sphere(50, new Point(0, 0, -100)),
+        Scene scene = new Scene(new Scene.SceneBuilder("Test scene")//
+                .setAmbientLight(new AmbientLight(new Color(255, 191, 191), new Double3(1,1,1))) //
+                .setBackground(new Color(75d, 127d, 90d)));
+
+
+        scene.geometries.add(new Sphere(new Point(0, 0, -100), 50),
                 new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)), // up
                 // left
                 new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)), // down
@@ -42,6 +43,9 @@ public class RenderTests {
         camera.renderImage();
         camera.printGrid(100, new Color(java.awt.Color.YELLOW));
         camera.writeToImage();
+
+
+
     }
 
     /**
@@ -49,6 +53,7 @@ public class RenderTests {
      */
     @Test
     public void basicRenderXml() {
+        /*
         Scene scene = new Scene("Test scene");
         // enter XML file name and parse from XML file into scene object
         // ...
@@ -61,5 +66,7 @@ public class RenderTests {
         camera.renderImage();
         camera.printGrid(100, new Color(java.awt.Color.YELLOW));
         camera.writeToImage();
+
+         */
     }
 }

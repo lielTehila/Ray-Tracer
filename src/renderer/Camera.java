@@ -118,36 +118,44 @@ public class Camera {
     }
 
     /**
-     *
-     * @param nX
-     * @param nY
-     * @param j
-     * @param i
-     * @return
+     * calaulate and return the ray from the camera to the specific pixel
+     * @param nX- Pixel size in a row
+     * @param nY- Pixel size in a column
+     * @param j-The number of pixels to move in a row
+     * @param i-The number of pixels to move in a column
+     * @return the ray from the camera to the specific pixel
      */
     public Ray constructRay(int nX, int nY, int j, int i)
     {
+
+
         Point Pc = place.add(vTo.scale(distance));
         double Ry= height/nY;
         double Rx= width/nX;
-        double yi=-(i-(nY-1)/2)*Ry;
-        double xj=(j-(nX-1)/2)*Rx;
+        double yi=-(i-(nY-1)/2d)*Ry;
+        double xj=(j-(nX-1)/2d)*Rx;
         Point pij = Pc;
+        //if there is no moving
         if (isZero(xj) && isZero(yi)) {
             return new Ray(place, pij.subtract(place));
         }
+        //if the moving is only at column
         if (isZero(xj)) {
             pij = pij.add(vUp.scale(yi));
             return new Ray(place, pij.subtract(place));
         }
+        //if the moving is only at row
         if (isZero(yi)) {
            pij = pij.add(vRight.scale(xj));
             return new Ray(place, pij.subtract(place));
         }
-
+        //pij is the point after the moving
         pij =pij.add(vRight.scale(xj).add(vUp.scale(yi)));
-        Vector vij=pij.subtract(place);
-        return  new Ray(place,vij);
+
+
+        return new Ray(place,pij.subtract(place));
+
+
     }
 
     public Camera setImageWriter(ImageWriter imageWriter) {

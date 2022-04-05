@@ -28,7 +28,7 @@ public class Scene {
         return geometries;
     }
 
-    private Scene(SceneBuilder builder){
+    public Scene(SceneBuilder builder){
         name = builder.name;
         background = builder.background;
         ambientLight = builder.ambientLight;
@@ -65,7 +65,7 @@ public class Scene {
         public Scene build(){
             Scene scene = new Scene(this);
             //......
-            return scene
+            return scene;
         }
     }
 }
