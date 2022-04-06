@@ -2,8 +2,8 @@ package scene;
 
 import geometries.Geometries;
 import lighting.AmbientLight;
+import primitives.Color;
 
-import java.awt.*;
 
 public class Scene {
 
@@ -28,7 +28,7 @@ public class Scene {
         return geometries;
     }
 
-    public Scene(SceneBuilder builder){
+    public Scene(SceneBuilder builder) {
         name = builder.name;
         background = builder.background;
         ambientLight = builder.ambientLight;
@@ -43,9 +43,10 @@ public class Scene {
         private AmbientLight ambientLight = new AmbientLight();
         private Geometries geometries = new Geometries();
 
-        public SceneBuilder(String name){
+        public SceneBuilder(String name) {
             this.name = name;
         }
+
         //chaining methods
 
         public SceneBuilder setBackground(Color background) {
@@ -62,9 +63,9 @@ public class Scene {
             this.geometries = geometries;
             return this;
         }
-        public Scene build(){
+
+        public Scene build() {
             Scene scene = new Scene(this);
-            //......
             return scene;
         }
     }

@@ -24,7 +24,7 @@ public class Camera {
      * @param up vector up
      * @param to vector to
      */
-    public Camera(Point p,Vector up,Vector to)
+    public Camera(Point p,Vector to,Vector up)
     {
         if(up.dotProduct(to)!=0)
         {
@@ -128,13 +128,16 @@ public class Camera {
     public Ray constructRay(int nX, int nY, int j, int i)
     {
 
-
         Point Pc = place.add(vTo.scale(distance));
+
         double Ry= height/nY;
         double Rx= width/nX;
+
         double yi=-(i-(nY-1)/2d)*Ry;
         double xj=(j-(nX-1)/2d)*Rx;
+
         Point pij = Pc;
+
         //if there is no moving
         if (isZero(xj) && isZero(yi)) {
             return new Ray(place, pij.subtract(place));
@@ -180,5 +183,9 @@ public class Camera {
     public void writeToImage() {
         imageWriter.writeToImage();
 
+    }
+
+    public void printGrid(int interval, Color color) {
+         imageWriter.printGrid(interval,color);
     }
 }

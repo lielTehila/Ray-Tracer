@@ -31,18 +31,4 @@ class ImageWriterTest {
         imageWriter.writeToImage();
 
     }
-    public void printGrid(int gap,Color color)
-    {
-        for (int i = 0; i < Nx; i++) {
-            for (int j = 0; j < Ny; j++) {
-                if (i % interval == 0 || j % interval == 0) {
-                    imageWriter.writePixel(i, j, red);
-                } else {
-                    imageWriter.writePixel(i, j, yellow);
-                }
-
-            }
-
-        }
-    }
 }
