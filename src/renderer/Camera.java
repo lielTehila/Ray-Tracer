@@ -4,6 +4,7 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import scene.Scene;
 
 import static primitives.Util.isZero;
 
@@ -161,31 +162,54 @@ public class Camera {
 
     }
 
+    /**
+     * set ImageWriter
+     * @param imageWriter
+     * @return
+     */
     public Camera setImageWriter(ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
         return this;
     }
 
+    /***
+     * set RayTracer
+     * @param rayTracer
+     * @return
+     */
     public Camera setRayTracer(RayTracer rayTracer) {
         this.rayTracer = rayTracer;
         return this;
     }
 
+    /**
+     * build the image with printing the geometries and the background
+     */
     public void renderImage() {
-        //read the matze
-    }
-/*
-    public void printGrid(int gap, Color color) {
-        imageWriter.printGrid(gap,color);
-    }
- */
-
-    public void writeToImage() {
+         if(place==null || vTo==null||vUp==null|| vRight==null|| width==0|| height==0|| imageWriter==null|| rayTracer==null)
+             throw new UnsupportedOperationException();
+        int Nx=imageWriter.getNx();
+        int Ny= imageWriter.getNy();
+        double interval = Nx/width;  //יכול להיות צריך לחלק בגובה ולא ברוחב
+        for (int i = 0; i < Nx; i++) {
+            for (int j = 0; j < Ny; j++) {
+                {imageWriter.writePixel(j,i,rayTracer.traceRay(constructRay(Nx,Ny,j,i)));}
+            }
+        }
         imageWriter.writeToImage();
 
     }
 
+
+
+    public void writeToImage() {
+        imageWriter.writeToImage();
+    }
+
     public void printGrid(int interval, Color color) {
+        if(color==null)
+            throw new UnsupportedOperationException();
          imageWriter.printGrid(interval,color);
     }
+
 }

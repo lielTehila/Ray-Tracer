@@ -1,5 +1,7 @@
 package renderer;
 
+import primitives.Color;
+import primitives.Ray;
 import scene.Scene;
 
 /**
@@ -7,9 +9,17 @@ import scene.Scene;
  */
 public abstract class RayTracer {
 
-    private final Scene scene;
+    protected Scene scene;
 
-    public RayTracer(Scene scene){
+    public RayTracer(Scene scene) {
         this.scene = scene;
     }
+
+    /**
+     * the fanction get a ray and reyurn the color of the ray attach
+     * @param ray
+     * @return
+     */
+    abstract public Color traceRay(Ray ray);
+
 }

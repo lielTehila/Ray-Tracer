@@ -30,6 +30,7 @@ class RayTest {
         assertEquals(new Point(0,0,0),r.findClosestPoint(lst1));
         // the closet Point is last
         assertEquals(new Point(3,0,0),r.findClosestPoint(lst2));
+
         // ============ Equivalence Partitions Tests ==============
         //the closet point is not first and not last
         assertEquals(new Point(2,0,0),r.findClosestPoint(lst3));
