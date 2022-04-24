@@ -24,10 +24,14 @@ public class Geometries implements Intersectable{
         }
         return null;
     }
+
     public Geometries()
     {
         shapes=new ArrayList<Intersectable>();
     }
     public Geometries(Intersectable... geometries) {}
-    public void add (Intersectable... geometries){}
+    public void add (Intersectable... geometries){
+        for(Intersectable i:geometries)
+            shapes.add(i);
+    }
 }

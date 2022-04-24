@@ -16,7 +16,7 @@ public class Scene {
         return name;
     }
 
-    public Color getBackground() {
+    public Color getBackGround() {
         return background;
     }
 

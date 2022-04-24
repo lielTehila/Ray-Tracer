@@ -101,10 +101,6 @@ public class RenderTests {
                 .setAmbientLight(new AmbientLight(new Color(255, 191, 191), new Double3(1, 1, 1))) //
                 .setBackground(new Color(75, 127, 90))
                 .build();
-//        Scene scene = new Scene("Test scene")//
-//                .setAmbientLight(new AmbientLight(new Color(255, 191, 191), //
-//                        new Double3(1,1,1))) //
-//                .setBackground(new Color(75, 127, 90));
 
         scene.getGeometries().add(new Sphere( new Point(0, 0, -100),50),
                 new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)), // up
