@@ -25,45 +25,47 @@ public class Camera {
      * @param up vector up
      * @param to vector to
      */
-    public Camera(Point p,Vector to,Vector up)
-    {
-        if(up.dotProduct(to)!=0)
-        {
+    public Camera(Point p, Vector to, Vector up) {
+        if (!isZero(up.dotProduct(to))) {
             throw new IllegalArgumentException();
         }
-        vTo=to.normalize();
-        vUp=up.normalize();
-        vRight=to.crossProduct(up).normalize();
-        place=p;
+
+        vTo = to.normalize();
+        vUp = up.normalize();
+
+        vRight = vTo.crossProduct(vUp);
+
+        place = p;
 
     }
 
     /**
      * set the size of view plane
-     * @param wh width
-     * @param ht height
+     *
+     * @param width  width of the view plane
+     * @param height height of the view plane
      * @return camera
      */
-    public Camera setVPSize(double wh, double ht)
-    {
-        width=wh;
-        height=ht;
+    public Camera setVPSize(double width, double height) {
+        this.width = width;
+        this.height = height;
         return this;
     }
 
     /**
      * set the distance of the view plane from the camera
+     *
      * @param d double
      * @return camera
      */
-    public Camera setVPDistance(double d)
-    {
-        distance=d;
+    public Camera setVPDistance(double d) {
+        distance = d;
         return this;
     }
 
     /**
      * return the place
+     *
      * @return place
      */
     public Point getPlace() {
@@ -72,6 +74,7 @@ public class Camera {
 
     /**
      * return the v to
+     *
      * @return
      */
     public Vector getVTo() {
@@ -80,6 +83,7 @@ public class Camera {
 
     /**
      * return the v up
+     *
      * @return
      */
     public Vector getVUp() {
@@ -88,6 +92,7 @@ public class Camera {
 
     /**
      * return the vRight
+     *
      * @return
      */
     public Vector getVRight() {
@@ -96,6 +101,7 @@ public class Camera {
 
     /**
      * return distance
+     *
      * @return
      */
     public double getDistance() {
@@ -104,6 +110,7 @@ public class Camera {
 
     /**
      * return width
+     *
      * @return
      */
     public double getWidth() {
@@ -112,6 +119,7 @@ public class Camera {
 
     /**
      * return Height
+     *
      * @return
      */
     public double getHeight() {
@@ -120,22 +128,22 @@ public class Camera {
 
     /**
      * calaulate and return the ray from the camera to the specific pixel
-     * @param nX- Pixel size in a row
-     * @param nY- Pixel size in a column
+     *
+     * @param nX-   Pixel size in a row
+     * @param nY-   Pixel size in a column
      * @param j-The number of pixels to move in a row
      * @param i-The number of pixels to move in a column
      * @return the ray from the camera to the specific pixel
      */
-    public Ray constructRay(int nX, int nY, int j, int i)
-    {
+    public Ray constructRay(int nX, int nY, int j, int i) {
 
         Point Pc = place.add(vTo.scale(distance));
 
-        double Ry= height/nY;
-        double Rx= width/nX;
+        double Ry = height / nY;
+        double Rx = width / nX;
 
-        double yi=-(i-(nY-1)/2d)*Ry;
-        double xj=(j-(nX-1)/2d)*Rx;
+        double yi = -(i - (nY - 1) / 2d) * Ry;
+        double xj = (j - (nX - 1) / 2d) * Rx;
 
         Point pij = Pc;
 
@@ -150,20 +158,21 @@ public class Camera {
         }
         //if the moving is only at row
         if (isZero(yi)) {
-           pij = pij.add(vRight.scale(xj));
+            pij = pij.add(vRight.scale(xj));
             return new Ray(place, pij.subtract(place));
         }
         //pij is the point after the moving
-        pij =pij.add(vRight.scale(xj).add(vUp.scale(yi)));
+        pij = pij.add(vRight.scale(xj).add(vUp.scale(yi)));
 
 
-        return new Ray(place,pij.subtract(place));
+        return new Ray(place, pij.subtract(place));
 
 
     }
 
     /**
      * set ImageWriter
+     *
      * @param imageWriter
      * @return
      */
@@ -186,20 +195,25 @@ public class Camera {
      * build the image with printing the geometries and the background
      */
     public void renderImage() {
-         if(place==null || vTo==null||vUp==null|| vRight==null|| width==0|| height==0|| imageWriter==null|| rayTracer==null)
-             throw new UnsupportedOperationException();
-        int Nx=imageWriter.getNx();
-        int Ny= imageWriter.getNy();
-        double interval = Nx/width;  //יכול להיות צריך לחלק בגובה ולא ברוחב
-        for (int i = 0; i < Nx; i++) {
-            for (int j = 0; j < Ny; j++) {
-                {imageWriter.writePixel(j,i,rayTracer.traceRay(constructRay(Nx,Ny,j,i)));}
+        if (place == null || vTo == null || vUp == null || vRight == null || width == 0 || height == 0 || imageWriter == null || rayTracer == null)
+            throw new UnsupportedOperationException();
+        int Nx = imageWriter.getNx();
+        int Ny = imageWriter.getNy();
+//        double interval = Nx / width;  //יכול להיות צריך לחלק בגובה ולא ברוחב
+        for (int i = 0; i < Ny; i++) {
+            for (int j = 0; j < Nx; j++) {
+                castRay(Nx, Ny, i, j);
             }
         }
         imageWriter.writeToImage();
 
     }
 
+    private void castRay(int Nx, int Ny, int i, int j) {
+        Ray ray = constructRay(Nx, Ny, j, i);
+        Color pixelColor = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, pixelColor);
+    }
 
 
     public void writeToImage() {
@@ -207,9 +221,9 @@ public class Camera {
     }
 
     public void printGrid(int interval, Color color) {
-        if(color==null)
-            throw new UnsupportedOperationException();
-         imageWriter.printGrid(interval,color);
+//        if (color == null)
+//            throw new UnsupportedOperationException();
+        imageWriter.printGrid(interval, color);
     }
 
 }
