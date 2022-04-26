@@ -7,17 +7,9 @@ import scene.Scene;
 
 public class PointLight extends Light {
     private Point position;
-    private double kC;
-    private double kL;
-    private double kQ;
-
-    public PointLight(Color intensity, Point p, double c, double l, double q) {
-        super(intensity);
-        position = p;
-        kC = c;
-        kL = l;
-        kQ = q;
-    }
+    private double kC=1;
+    private double kL=0;
+    private double kQ=0;
 
     /***
      * constractor with default values for the discount factors
@@ -35,7 +27,9 @@ public class PointLight extends Light {
         private double kL=0;
         private double kQ=0;
 
+        public PointLightBuilder() {
 
+        }
         //chaining methods
 
         public PointLightBuilder setKC(double kc) {
