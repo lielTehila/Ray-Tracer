@@ -65,9 +65,9 @@ public class Plane extends Geometry{
      * @param ray - ray pointing towards the graphic object
      * @return Intersections between the ray and the geometry.
      */
-    @Override
-    public List<Point> findIntersections(Ray ray) {
 
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Vector n = normal;
         Vector v = ray.getDir();
         Point p0 = ray.getP0();
@@ -105,6 +105,6 @@ public class Plane extends Geometry{
         }
         Point point = ray.getPoint(t);
 
-        return List.of(point);
+        return List.of(new GeoPoint(this,ray.getPoint(t)));
     }
 }

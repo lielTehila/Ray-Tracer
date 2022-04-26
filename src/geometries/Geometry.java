@@ -8,7 +8,7 @@ import primitives.Vector;
  * interface for all graphic 3D objects that are
  * positioned in our 3D
  */
-abstract public class Geometry extends Intersectable {
+abstract public class  Geometry extends Intersectable {
 
     protected Color emission=Color.BLACK;
 

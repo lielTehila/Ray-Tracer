@@ -25,13 +25,13 @@ public class Sphere extends Geometry{
      * @param ray - ray pointing towards the graphic object
      * @return Intersections between the ray and the geometry.
      */
-    @Override
-    public List<Point> findIntersections(Ray ray) {
 
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Point P0 = ray.getP0();
         //check the cae that the point is on the center
         if (P0.equals(center)) {
-            return List.of(center.add(ray.getDir().scale(radius)));
+            return List.of(new GeoPoint(this,center.add(ray.getDir().scale(radius))));
         }
 
         Vector u = this.center.subtract(P0);
@@ -47,17 +47,17 @@ public class Sphere extends Geometry{
         if (t1<= 0 && t2<=0)
             return null;
 
-        List<Point> lst=new ArrayList<Point>();
+        List<GeoPoint> lst=new LinkedList<>();
         if (t1 >0)
         {
             Point cross_p = ray.getP0().add(ray.getDir().scale(t1));
-            lst.add(cross_p);
+            lst.add(new GeoPoint(this,cross_p));
         }
 
         if (t2 >0)
         {
             Point cross_p = ray.getP0().add(ray.getDir().scale(t2));
-            lst.add(cross_p);
+            lst.add(new GeoPoint(this,cross_p));
         }
 
         return lst;

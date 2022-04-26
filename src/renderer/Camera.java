@@ -195,11 +195,12 @@ public class Camera {
      * build the image with printing the geometries and the background
      */
     public void renderImage() {
-        if (place == null || vTo == null || vUp == null || vRight == null || width == 0 || height == 0 || imageWriter == null || rayTracer == null)
-            throw new UnsupportedOperationException();
+       // if (place == null || vTo == null || vUp == null || vRight == null || width == 0 || height == 0 || imageWriter == null || rayTracer == null)
+//        if (this == null ||  imageWriter == null || rayTracer == null)
+//            throw new UnsupportedOperationException();
         int Nx = imageWriter.getNx();
         int Ny = imageWriter.getNy();
-//        double interval = Nx / width;  //יכול להיות צריך לחלק בגובה ולא ברוחב
+
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
                 castRay(Nx, Ny, i, j);

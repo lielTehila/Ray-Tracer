@@ -17,19 +17,32 @@ abstract public class Intersectable {
      * @param ray - ray pointing towards the graphic object
      * @return immutable list of intersections  points {@link Point}
      */
-    public abstract List<Point> findIntersections(Ray ray);
-    public List<GeoPoint> findGeoIntersections(Ray ray){
+    public final List<Point> findIntersections(Ray ray) {
+        List<GeoPoint> geoList = findGeoIntersections(ray);
+        return geoList == null ? null
+                : geoList.stream()
+                .map(gp -> gp.point)
+                .toList();
+    }
+
+    /***
+     * ????
+     * @param ray
+     * @return
+     */
+    public final List<GeoPoint> findGeoIntersections(Ray ray){
         return findGeoIntersectionsHelper(ray);
     }
+
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
 
     /**
      *?????
      */
-    public static class GeoPoint {
+    public static class GeoPoint{
 
-        public Geometry geometry;
-        public Point point;
+        public final Geometry geometry;
+        public final Point point;
 
         /***
          * the constructor with params for the internal class

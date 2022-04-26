@@ -19,9 +19,9 @@ public class Triangle extends Polygon {
      * @param ray - ray pointing towards the graphic object
      * @return Intersections between the ray and the geometry.
      */
-    @Override
-    public List<Point> findIntersections(Ray ray) {
 
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         List<Vector> lst = new ArrayList<Vector>();
 
         Point pr = ray.getP0();
@@ -31,7 +31,7 @@ public class Triangle extends Polygon {
             Point pHelp = p.subtract(pr);
             lst.add(new Vector(pHelp.get_xyz()));
         }
-        //ask: if someone is vector 0? what happened?--------------------------------------------
+
         Vector n1 = lst.get(0).crossProduct(lst.get(1)).normalize();
         Vector n2 = lst.get(1).crossProduct(lst.get(2)).normalize();
         Vector n3 = lst.get(2).crossProduct(lst.get(0)).normalize();
@@ -48,8 +48,9 @@ public class Triangle extends Polygon {
         if (!(d1 > 0 && d2 > 0 && d3 > 0 || d1 < 0 && d2 < 0 && d3 < 0)) {
             return null;
         }
-
-        return plane.findIntersections(ray);
+        List<GeoPoint> pointlst =plane.findGeoIntersections(ray);
+        Point intersectPoint = pointlst.get(0).point;
+        return List.of(new GeoPoint(this, intersectPoint));
     }
 }
 

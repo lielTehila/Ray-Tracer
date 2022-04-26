@@ -21,8 +21,9 @@ public class Cylinder extends Geometry{
      * @param ray - ray pointing towards the graphic object
      * @return Intersections between the ray and the geometry.
      */
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         return null;
     }
 }
