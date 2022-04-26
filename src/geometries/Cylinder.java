@@ -6,7 +6,7 @@ import primitives.Vector;
 
 import java.util.List;
 
-public class Cylinder implements Geometry{
+public class Cylinder extends Geometry{
     final double height;
 
     public Cylinder(double h) {height=h;}
