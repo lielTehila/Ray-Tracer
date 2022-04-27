@@ -6,10 +6,10 @@ import primitives.Point;
 import scene.Scene;
 
 public class PointLight extends Light {
-    private Point position;
-    private double kC=1;
-    private double kL=0;
-    private double kQ=0;
+    private final Point position;
+    private double kC;
+    private double kL;
+    private double kQ;
 
     /***
      * constractor with default values for the discount factors
@@ -18,36 +18,24 @@ public class PointLight extends Light {
      */
     public PointLight(Color intensity, Point p) {
         super(intensity);
-        position = p;
+        this.position = p;
+        kC = 1;
+        kL = 0;
+        kQ = 0;
     }
 
-    public static class PointLightBuilder {
+    public PointLight setKC(double kc) {
+        this.kC = kc;
+        return this;
+    }
 
-        private double kC=1;
-        private double kL=0;
-        private double kQ=0;
+    public PointLight setKL(double kl) {
+        this.kL = kl;
+        return this;
+    }
 
-        public PointLightBuilder() {
-
-        }
-        //chaining methods
-
-        public PointLightBuilder setKC(double kc) {
-            this.kC = kc;
-            return this;
-        }
-        public PointLightBuilder setKL(double kl) {
-            this.kL = kl;
-            return this;
-        }
-        public PointLightBuilder setKQ(double kq) {
-            this.kQ = kq;
-            return this;
-        }
-
-        public PointLight build() {
-            PointLight pointLight = new PointLight(this);  //להוסיף בנאי של POINTLIGHT שמקבל אובייקט זה->, ולהבין איך צריך לאתחל את מקדמי ההנחתה
-            return pointLight;
-        }
+    public PointLight setKQ(double kq) {
+        this.kQ = kq;
+        return this;
     }
 }
