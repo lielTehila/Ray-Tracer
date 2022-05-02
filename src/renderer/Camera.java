@@ -194,7 +194,7 @@ public class Camera {
     /**
      * build the image with printing the geometries and the background
      */
-    public void renderImage() {
+    public Camera renderImage() {
        // if (place == null || vTo == null || vUp == null || vRight == null || width == 0 || height == 0 || imageWriter == null || rayTracer == null)
 //        if (this == null ||  imageWriter == null || rayTracer == null)
 //            throw new UnsupportedOperationException();
@@ -207,7 +207,7 @@ public class Camera {
             }
         }
         imageWriter.writeToImage();
-
+        return this;
     }
 
     private void castRay(int Nx, int Ny, int i, int j) {
@@ -217,8 +217,9 @@ public class Camera {
     }
 
 
-    public void writeToImage() {
+    public Camera writeToImage() {
         imageWriter.writeToImage();
+        return  this;
     }
 
     public void printGrid(int interval, Color color) {
