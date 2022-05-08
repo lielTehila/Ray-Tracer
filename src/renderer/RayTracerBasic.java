@@ -9,6 +9,7 @@ import geometries.Intersectable.GeoPoint;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 public class RayTracerBasic extends RayTracer{
     public RayTracerBasic(Scene scene) {
@@ -29,8 +30,10 @@ public class RayTracerBasic extends RayTracer{
 
     private Color calcLocalEffects(GeoPoint gp, Ray ray) {
         Color color = gp.geometry.getEmission();
-        Vector v = ray.getDir (); Vector n = gp.geometry.getNormal(gp.point);
-        double nv = alignZero(n.dotProduct(v)); if (nv == 0) return color;
+        Vector v = ray.getDir ();
+        Vector n = gp.geometry.getNormal(gp.point);
+        double nv = alignZero(n.dotProduct(v));
+        if (nv == 0) return color;
         Material material = gp.geometry.getMaterial();
         for (LightSource lightSource : scene.getLights()) {
             Vector l = lightSource.getL(gp.point);
@@ -43,6 +46,40 @@ public class RayTracerBasic extends RayTracer{
         }
         return color;
     }
+
+    /**
+     * calc the diffusive light effect on the specific point
+     * @param material the contain the attenuation and shininess factors
+     * @param nl dot-product n*l
+     * @return double3 of the diffusive factor
+     */
+    private Double3 calcDiffusive(Material material,double nl) {
+        return  material.getkD().scale(Math.abs(nl));
+    }
+
+    /**
+     * calc the specular light effect on the specific point
+     * @param material the contain the attenuation and shininess factors
+     * @param n  normal to surface at the point
+     * @param l direction from light to point
+     * @param nl dot-product n*l
+     * @param v  direction from point of view to point
+     * @return double3 of the scapular factor
+     */
+    private Double3 calcSpecular(Material material,Vector n,Vector l,double nl,Vector v) {
+        // nl is the dot product among the vector from the specular light to the point and the normal vector of the point
+        //nl must not be zero
+        if (isZero(nl)) {
+            throw new IllegalArgumentException("nl cannot be Zero for scaling the normal vector");
+        }
+        Vector r = l.subtract(n.scale(2 * nl));
+        double vr = alignZero(v.dotProduct(r));
+//        if (vr >= 0) {
+//            return Color.BLACK; // view from direction opposite to r vector
+//        }
+        return material.getkS().scale(Math.pow(-1d * vr,material.getShininess()));
+    }
+
     /***
      * return the color of the point that the ray arrive to
      * @param ray the ray that we send
