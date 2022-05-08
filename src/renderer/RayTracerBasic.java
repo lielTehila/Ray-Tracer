@@ -1,13 +1,14 @@
 package renderer;
 
 import geometries.Geometries;
-import primitives.Color;
-import primitives.Point;
-import primitives.Ray;
+import lighting.LightSource;
+import primitives.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
+
+import static primitives.Util.alignZero;
 
 public class RayTracerBasic extends RayTracer{
     public RayTracerBasic(Scene scene) {
@@ -17,16 +18,31 @@ public class RayTracerBasic extends RayTracer{
     /***
      * return the color of the point on the geometry
      * by calculate the ambientlight, emmision, intensity of the point
-     * @param p point on a geometry
+     * @param intersection point on a geometry
      * @return the color of the point
      */
-    private Color calcColor(GeoPoint p,Ray ray) {
-        Color result=scene.getAmbientLight().getIntensity();
-        result=result.add(p.geometry.getEmission());
-        return result;
+    private Color calcColor(GeoPoint intersection, Ray ray) {
+        return scene.getAmbientLight().getIntensity()//
+                .add(calcLocalEffects(intersection, ray));
     }
 
 
+    private Color calcLocalEffects(GeoPoint gp, Ray ray) {
+        Color color = gp.geometry.getEmission();
+        Vector v = ray.getDir (); Vector n = gp.geometry.getNormal(gp.point);
+        double nv = alignZero(n.dotProduct(v)); if (nv == 0) return color;
+        Material material = gp.geometry.getMaterial();
+        for (LightSource lightSource : scene.getLights()) {
+            Vector l = lightSource.getL(gp.point);
+            double nl = alignZero(n.dotProduct(l));
+            if (nl * nv > 0) { // sign(nl) == sing(nv)
+                Color iL = lightSource.getIntensity(gp.point);
+                color = color.add(iL.scale(calcDiffusive(material, nl)),
+                        iL.scale(calcSpecular(material, n, l, nl, v)));
+            }
+        }
+        return color;
+    }
     /***
      * return the color of the point that the ray arrive to
      * @param ray the ray that we send

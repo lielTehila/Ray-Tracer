@@ -39,11 +39,20 @@ abstract public class  Geometry extends Intersectable {
      */
     abstract public Vector getNormal(Point point);
 
+    /***
+     * set the material of the object
+     * @param material of this geometry
+     * @return this
+     */
     public Geometry setMaterial(Material material) {
         this.material = material;
         return this;
     }
 
+    /***
+     * get the material of the geometry
+     * @return the geomery material
+     */
     public Material getMaterial() {
         return material;
     }

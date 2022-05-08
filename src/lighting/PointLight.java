@@ -21,9 +21,9 @@ public class PointLight extends Light  implements LightSource{
     public PointLight(Color intensity, Point p) {
         super(intensity);
         this.position = p;
-        kC = 1;
-        kL = 0;
-        kQ = 0;
+        kC = new Double3(1);
+        kL = new Double3(0);
+        kQ = new Double3(0);
     }
 
     public PointLight setKc(Double3 kc) {
@@ -58,7 +58,7 @@ public class PointLight extends Light  implements LightSource{
     public Color getIntensity(Point p) {
 
         double distance = position.distance(p);
-        double denominator = kC+kL.scale(distance)+kQ.scale(Math.pow(distance,2));
+        Double3 denominator = kC.add(kL.scale(distance).add(kQ.scale(Math.pow(distance,2))));
         return getIntensity().reduce(denominator);
     }
 
