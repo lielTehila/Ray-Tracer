@@ -200,20 +200,34 @@ public class LightsTests {
 	 */
 	@Test
 	public void spheresManyLights() {
-		scene1.getLights().add(new SpotLight(spCL, spPL, new Vector(1, 1, -0.5)));
 		scene1.getGeometries().add(sphere);
-		scene1.getLights().add(new SpotLight(trCL, trPL, trDL)
-//				.setNarrowBeam(10)
+		scene1.getLights().add(new SpotLight(spCL, spPL, new Vector(1, 1, -0.5))
 				.setKl(0.001)
 				.setKq(0.0001));
-		scene1.getLights().add(new PointLight(trCL, trPL).setKl(0.001).setKq(0.0002));
-		scene1.getLights().add(new DirectionalLight(trCL, trDL));
+		scene1.getLights().add(new PointLight(new Color(145,255,58), new Point(-50,-50,300)).setKl(0.001).setKq(0.0002));
+		scene1.getLights().add(new DirectionalLight(new Color(25,255,252), new Vector(13, 4, -0.5)));
+
+
 
 		ImageWriter imageWriter = new ImageWriter("lightSphereManyLights", 500, 500);
 		camera1.setImageWriter(imageWriter) //
-				.setRayTracer(new RayTracerBasic(scene2)) //
+				.setRayTracer(new RayTracerBasic(scene1)) //
 				.renderImage() //
 				.writeToImage(); //
+//		scene1.getLights().add(new SpotLight(spCL, spPL, new Vector(1, 1, -0.5)));
+//		scene1.getGeometries().add(sphere);
+//		scene1.getLights().add(new SpotLight(trCL, trPL, trDL)
+////				.setNarrowBeam(10)
+//				.setKl(0.001)
+//				.setKq(0.0001));
+//		scene1.getLights().add(new PointLight(trCL, trPL).setKl(0.001).setKq(0.0002));
+//		scene1.getLights().add(new DirectionalLight(trCL, trDL));
+//
+//		ImageWriter imageWriter = new ImageWriter("lightSphereManyLights", 500, 500);
+//		camera1.setImageWriter(imageWriter) //
+//				.setRayTracer(new RayTracerBasic(scene2)) //
+//				.renderImage() //
+//				.writeToImage(); //
 	}
 
 }
