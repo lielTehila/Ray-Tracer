@@ -1,5 +1,6 @@
 package renderer;
 
+import geometries.FlatGeometry;
 import geometries.Geometries;
 import lighting.LightSource;
 import primitives.*;
@@ -12,6 +13,8 @@ import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 public class RayTracerBasic extends RayTracer{
+
+    private static final double DELTA = 0.1; //Fixed for first moving magnitude rays for shading rays
     public RayTracerBasic(Scene scene) {
         super(scene);
     }
@@ -80,6 +83,26 @@ public class RayTracerBasic extends RayTracer{
         return material.getkS().scale(Math.pow(-1d * vr,material.getShininess()));
     }
 
+    /***
+     * Checking for shading between a point and the light source.
+     * @param gp The geometric point being examined for non-shading between the point and the light source
+     * @param l
+     * @param n
+     * @return
+     */
+    private boolean unshaded(GeoPoint gp, Vector l, Vector n)
+    {
+        Vector lightDirection = l.scale(-1); // from point to light source
+        Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : - DELTA);
+        Point point = gp.point.add(delta);
+        Ray lightRay = new Ray(point, lightDirection);
+        List<Point> intersections = scene.getGeometries().findIntersections(lightRay);
+        // Flat geometry can't self-intersect
+        if (gp.geometry instanceof FlatGeometry) {
+            intersections.remove(gp);
+        }
+        return intersections.isEmpty();
+    }
     /***
      * return the color of the point that the ray arrive to
      * @param ray the ray that we send

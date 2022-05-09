@@ -9,7 +9,7 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Plane extends Geometry{
+public class Plane extends FlatGeometry{
     final Point q0;
     final Vector normal;
 
@@ -107,4 +107,5 @@ public class Plane extends Geometry{
 
         return List.of(new GeoPoint(this,ray.getPoint(t)));
     }
+
 }
