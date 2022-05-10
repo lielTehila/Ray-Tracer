@@ -11,7 +11,7 @@ import static primitives.Util.*;
  *
  * @author Dan
  */
-public class Polygon extends FlatGeometry {
+public class Polygon extends Geometry implements FlatGeometry {
     /**
      * List of polygon's vertices
      */
@@ -95,7 +95,7 @@ public class Polygon extends FlatGeometry {
      */
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         return null;
     }
 }

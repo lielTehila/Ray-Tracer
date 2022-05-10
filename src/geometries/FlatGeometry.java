@@ -8,10 +8,6 @@ import primitives.Color;
  * to differentiate it from RadialGeometry
  * we did not decalre it as an interface
  */
-public abstract class FlatGeometry extends Geometry {
-    /**
-     * Associated plane in which the flat geometry lays
-     */
-    public Plane plane = null;
+public interface FlatGeometry{
 
 }

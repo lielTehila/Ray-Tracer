@@ -8,6 +8,19 @@ public class Material {
     private Double3 kS = Double3.ZERO;
     private int nShininess = 0;
 
+    public Material setKt(double kT) {
+        this.kT =new Double3(kT) ;
+        return this;
+    }
+
+    public Material setKr(double kR) {
+        this.kR = new Double3(kR);
+        return this;
+    }
+
+    public Double3 kT; //Promotes transparency
+    public Double3 kR; //Coefficient of reflection
+
     /***
      * set the factor d
      * @param kD object double

@@ -19,21 +19,21 @@ public class Point{
      * @return X
      */
     public double get_x() {
-        return _xyz.get_x();
+        return _xyz.d1;
     }
     /***
      * implement getY
      * @return Y
      */
     public double get_y() {
-        return _xyz.get_y();
+        return _xyz.d2;
     }
     /***
      * implement getZ
      * @return Z
      */
     public double get_z() {
-        return _xyz.get_z();
+        return _xyz.d3;
     }
 
     /**

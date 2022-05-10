@@ -9,7 +9,7 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Plane extends FlatGeometry{
+public class Plane extends Geometry implements FlatGeometry{
     final Point q0;
     final Vector normal;
 
@@ -67,7 +67,7 @@ public class Plane extends FlatGeometry{
      */
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         Vector n = normal;
         Vector v = ray.getDir();
         Point p0 = ray.getP0();
@@ -100,7 +100,7 @@ public class Plane extends FlatGeometry{
 
         double t= nP0Q0/nv;
         // make sure that t is more than 0
-        if(isZero(alignZero(t)) || t<0){
+        if(alignZero(t-maxDistance)>0 || t<=0){
             return null;
         }
         Point point = ray.getPoint(t);
