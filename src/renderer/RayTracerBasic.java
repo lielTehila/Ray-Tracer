@@ -9,6 +9,7 @@ import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
 
+
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
