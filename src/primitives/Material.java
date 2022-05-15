@@ -6,20 +6,31 @@ package primitives;
 public class Material {
     private Double3 kD = Double3.ZERO;
     private Double3 kS = Double3.ZERO;
+    public Double3 kT; //Promotes transparency
+    public Double3 kR; //Coefficient of reflection
+
     private int nShininess = 0;
 
+    /**
+     * update kT value
+     * @param kT transparency value
+     * @return this
+     */
     public Material setKt(double kT) {
         this.kT =new Double3(kT) ;
         return this;
     }
 
+    /**
+     * update kR value
+     * @param kR reflection value
+     * @return this
+     */
     public Material setKr(double kR) {
         this.kR = new Double3(kR);
         return this;
     }
 
-    public Double3 kT; //Promotes transparency
-    public Double3 kR; //Coefficient of reflection
 
     /***
      * set the factor d

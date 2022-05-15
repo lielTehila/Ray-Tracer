@@ -117,6 +117,7 @@ public class ShadowTests {
 		camera.setImageWriter(new ImageWriter("shadowTrianglesSphere", 600, 600)) //
 				.renderImage() //
 				.writeToImage();
+
 	}
 
 }

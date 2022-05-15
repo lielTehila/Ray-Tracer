@@ -33,6 +33,8 @@ public class Sphere extends Geometry{
         Point P0 = ray.getP0();
         Vector v = ray.getDir();
         //check the cae that the point is on the center
+
+
         if (P0.equals(center)) {
             if(alignZero(radius-maxDistance)>0){
                 return null;

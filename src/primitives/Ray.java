@@ -33,6 +33,13 @@ public class Ray {
                 '}';
     }
 
+    public Ray(Point point, Vector direction, Vector normal) {
+        //point + normal.scale(±EPSILON)
+        this.dir = direction.normalize();
+        double nv = normal.dotProduct(direction);
+        Vector normalDelta = normal.scale((nv > 0 ? DELTA : -DELTA));
+        this.p0 = point.add(normalDelta);
+    }
     /***
      *
      * @return p0
