@@ -77,7 +77,7 @@ public class RayTracerBasic extends RayTracer{
 //        if (gp.geometry instanceof FlatGeometry) {
 //            intersections.remove(gp);
 //        }
-
+//
         return intersections==null;
     }
     /**

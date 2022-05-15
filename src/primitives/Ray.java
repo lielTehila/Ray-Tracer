@@ -9,7 +9,7 @@ import static primitives.Util.isZero;
 public class Ray {
     final private Point p0;
     final private Vector dir;
-
+    private static final double DELTA = 0.1; //Fixed for first moving magnitude rays for shading rays
     /***
      * constractor with params
      * @param  p-Point
