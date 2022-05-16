@@ -52,7 +52,7 @@ public class RayTracerBasic extends RayTracer{
     // recorasifi
     private Color calcColor(GeoPoint gp, Ray ray, int level, Double3 k) {
         Color color = gp.geometry.getEmission();
-        color.add(calcLocalEffects(gp, ray, k));
+        color = color.add(calcLocalEffects(gp, ray, k));
         if(1 == level )
             return color;
         return color.add(calcGlobalEffects(gp, ray, level, k));
