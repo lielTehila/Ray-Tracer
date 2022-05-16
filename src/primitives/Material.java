@@ -6,8 +6,8 @@ package primitives;
 public class Material {
     private Double3 kD = Double3.ZERO;
     private Double3 kS = Double3.ZERO;
-    public Double3 kT; //Promotes transparency
-    public Double3 kR; //Coefficient of reflection
+    public Double3 kT= Double3.ZERO; //Promotes transparency
+    public Double3 kR= Double3.ZERO; //Coefficient of reflection
 
     private int nShininess = 0;
 
