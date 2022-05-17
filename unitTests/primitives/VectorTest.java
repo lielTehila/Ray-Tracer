@@ -96,7 +96,8 @@ class VectorTest {
             out.println("ERROR: the normalized vector is not parallel to the original one");
         } catch (Exception e) {
         }
-        assertTrue(v.dotProduct(u) < 0, "ERROR: the normalized vector is opposite to the original one");
+        double x=v.dotProduct(u);
+        assertTrue(v.dotProduct(u) > 0, "ERROR: the normalized vector is opposite to the original one");
 
     }
 }

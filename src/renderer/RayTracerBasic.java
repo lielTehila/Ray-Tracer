@@ -124,19 +124,40 @@ public class RayTracerBasic extends RayTracer{
         for (LightSource lightSource : scene.getLights()) {
             Vector l = lightSource.getL(point);
             double nl = alignZero(n.dotProduct(l));
-            if (nl * nv > 0)
-                //Double3 ktr=transparency(lightSource,l,n,gp)
-                if(unshaded(lightSource,l,n,gp)) {
-                    Color iL = lightSource.getIntensity(point);
-                    //Color iL = lightSource.getIntensity(point).scale(ktr);
+            if (nl * nv > 0) {
+                Double3 ktr = transparency(gp, lightSource, l, n);
+                if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+                //if(unshaded(lightSource,l,n,gp)) {
+                    //Color iL = lightSource.getIntensity(point);
+                    Color iL = lightSource.getIntensity(point).scale(ktr);
                     color = color.add(
                             iL.scale(calcDiffusive(material, nl)),
                             iL.scale(calcSpecular(material, n, l, nl, v)));
                 }
             }
+        }
         return color;
     }
 
+    private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n){
+        Vector lightDirection = l.scale(-1);
+        Point point = geoPoint.point;
+        Ray lightRay = new Ray(point,lightDirection, n);//הפכתי
+        double maxDistance = lightSource.getDistance(point);
+
+        List<GeoPoint> intersection = scene.getGeometries().findGeoIntersections(lightRay, maxDistance);
+        if(intersection==null){
+            return Double3.ONE;
+        }
+
+        Double3 ktr = Double3.ONE;
+        for(var geo:intersection){
+            ktr = ktr.product(geo.geometry.getMaterial().kT);
+            if (ktr.lowerThan(MIN_CALC_COLOR_K))
+                return ZERO;
+        }
+        return ktr;
+    }
     /***
      * Checking for shading between a point and the light source.
      * @param   //geometric point being examined for non-shading between the point and the light source
@@ -155,7 +176,19 @@ public class RayTracerBasic extends RayTracer{
         Ray lightRay = new Ray(pointGeo, lightDirection, n);//יש מצב שיש כאן בעיה
         double maxDistance=light.getDistance(pointGeo);
         List<GeoPoint> intersections = scene.getGeometries().findGeoIntersections(lightRay,maxDistance);
-        return intersections==null;
+        if(intersections==null)
+            return true;
+        double lightDistance=light.getDistance(pointGeo);//calaulate the distance btwen light and point
+        for(GeoPoint gp:intersections)
+        {
+            if(gp.point.distance(geopoint.point)<lightDistance&&gp.geometry.getMaterial().kT.equals(new Double3(0.0)))
+            {
+                return false;
+            }
+        }
+        return  true;
+
+        //return intersections==null;
   }
     /**
      * calc the diffusive light effect on the specific point
@@ -191,6 +224,7 @@ public class RayTracerBasic extends RayTracer{
         }
         return material.getkS().scale(Math.pow(-1d * vr,material.getShininess()));
     }
+
 
 
 
