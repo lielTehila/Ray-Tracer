@@ -5,8 +5,10 @@ import primitives.Ray;
 import primitives.Vector;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 public class Triangle extends Polygon {
@@ -22,16 +24,15 @@ public class Triangle extends Polygon {
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
-        List<Vector> lst = new ArrayList<Vector>();
+        List<Vector> lst = new LinkedList<>();
 
         Point pr = ray.getP0();
         Vector v = ray.getDir();
 
         for (Point p : super.vertices) {
-            Point pHelp = p.subtract(pr);
-            lst.add(new Vector(pHelp.get_xyz()));
+            Vector vp = p.subtract(pr);
+            lst.add(vp);
         }
-
         Vector n1 = lst.get(0).crossProduct(lst.get(1)).normalize();
         Vector n2 = lst.get(1).crossProduct(lst.get(2)).normalize();
         Vector n3 = lst.get(2).crossProduct(lst.get(0)).normalize();
@@ -52,6 +53,9 @@ public class Triangle extends Polygon {
         if(pointlst==null)
             return null;
         Point intersectPoint = pointlst.get(0).point;
+        double t=intersectPoint.distance(pr);
+        if((alignZero(t-maxDistance)) > 0)
+            return null;
         return List.of(new GeoPoint(this, intersectPoint));
     }
 }

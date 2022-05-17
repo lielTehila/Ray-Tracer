@@ -67,7 +67,9 @@ public class Sphere extends Geometry{
         if (t2 >0 &&alignZero(t2-maxDistance)<=0)
         {
             Point cross_p = ray.getP0().add(ray.getDir().scale(t2));
-            lst.add(new GeoPoint(this,cross_p));
+            double t=cross_p.distance(P0);
+            if((alignZero(t-maxDistance)) <= 0)
+                lst.add(new GeoPoint(this,cross_p));
         }
 
         return lst;
