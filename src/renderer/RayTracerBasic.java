@@ -158,6 +158,7 @@ public class RayTracerBasic extends RayTracer{
         }
         return ktr;
     }
+
     /***
      * Checking for shading between a point and the light source.
      * @param   //geometric point being examined for non-shading between the point and the light source

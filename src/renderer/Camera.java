@@ -93,7 +93,7 @@ public class Camera {
     /**
      * return the vRight
      *
-     * @return
+     * @return vRight
      */
     public Vector getVRight() {
         return vRight;
@@ -102,25 +102,21 @@ public class Camera {
     /**
      * return distance
      *
-     * @return
+     * @return distance
      */
     public double getDistance() {
         return distance;
     }
 
     /**
-     * return width
-     *
-     * @return
+     * @return width
      */
     public double getWidth() {
         return width;
     }
 
     /**
-     * return Height
-     *
-     * @return
+     * @return Height
      */
     public double getHeight() {
         return height;
@@ -173,8 +169,8 @@ public class Camera {
     /**
      * set ImageWriter
      *
-     * @param imageWriter
-     * @return
+     * @param imageWriter get new imageWriter
+     * @return this
      */
     public Camera setImageWriter(ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
@@ -183,8 +179,8 @@ public class Camera {
 
     /***
      * set RayTracer
-     * @param rayTracer
-     * @return
+     * @param rayTracer get new rayTracer
+     * @return this
      */
     public Camera setRayTracer(RayTracer rayTracer) {
         this.rayTracer = rayTracer;
@@ -203,6 +199,7 @@ public class Camera {
 
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
+
                 castRay(Nx, Ny, i, j);
             }
         }
@@ -210,12 +207,32 @@ public class Camera {
         return this;
     }
 
+    /***
+     * create ray from camera to specific pixel
+     * @param Nx - Pixel size in a row
+     * @param Ny -Pixel size in a column
+     * @param i -The number of pixels to move in a column
+     * @param j-The number of pixels to move in a row
+     */
+//    private void castRay(int Nx, int Ny, int i, int j) {
+//        //improving of anti-aliasing
+//        int bigNy = 9*Ny;
+//        int bigNx = 9*Nx;
+//        Color pixelColor=new Color(java.awt.Color.BLACK);
+//        for (int iColumn = i*9; iColumn < i*9+9; iColumn++) {
+//            for (int jRow = j*9; jRow < j*9+9; jRow++) {
+//                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+//                pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
+//            }
+//        }
+//        pixelColor=pixelColor.reduce(81);
+//        imageWriter.writePixel(j, i, pixelColor);
+//    }
     private void castRay(int Nx, int Ny, int i, int j) {
         Ray ray = constructRay(Nx, Ny, j, i);
         Color pixelColor = rayTracer.traceRay(ray);
         imageWriter.writePixel(j, i, pixelColor);
     }
-
 
     public Camera writeToImage() {
         imageWriter.writeToImage();
