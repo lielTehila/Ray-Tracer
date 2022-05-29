@@ -139,10 +139,18 @@ public class RayTracerBasic extends RayTracer{
         return color;
     }
 
+    /**
+     *
+     * @param geoPoint point of geometry
+     * @param lightSource the light object
+     * @param l vector of the direction of the light
+     * @param n normal to the geo point
+     * @return the level of the transparency
+     */
     private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n){
         Vector lightDirection = l.scale(-1);
         Point point = geoPoint.point;
-        Ray lightRay = new Ray(point,lightDirection, n);//הפכתי
+        Ray lightRay = new Ray(point,lightDirection, n);
         double maxDistance = lightSource.getDistance(point);
 
         List<GeoPoint> intersection = scene.getGeometries().findGeoIntersections(lightRay, maxDistance);
@@ -157,17 +165,34 @@ public class RayTracerBasic extends RayTracer{
                 return ZERO;
         }
         return ktr;
+//        Vector lightDirection = l.scale(-1);
+//        Point point = geoPoint.point;
+//        Ray lightRay = new Ray(point,lightDirection, n);
+//        double maxDistance = lightSource.getDistance(point);
+//
+//        List<GeoPoint> intersection = scene.getGeometries().findGeoIntersections(lightRay, maxDistance);
+//        if(intersection==null){
+//            return Double3.ONE;
+//        }
+//
+//        Double3 ktr = Double3.ONE;
+//        for(var geo:intersection){
+//            ktr = ktr.product(geo.geometry.getMaterial().kT);
+//            if (ktr.lowerThan(MIN_CALC_COLOR_K))
+//                return ZERO;
+//        }
+//        return ktr;
     }
 
-    /***
-     * Checking for shading between a point and the light source.
-     * @param   //geometric point being examined for non-shading between the point and the light source
-     * @param
+
+    /**
+     * Checking for shading between a point and the light source //geometric point being examined for non-shading between the point and the light source
+     * @param light
+     * @param l
      * @param n
+     * @param geopoint
      * @return
      */
-    //GeoPoint geopoint,LightSource lightSource , Vector n,double nl, double nv
-    //GeoPoint gp, LightSource lightSource , Vector n,double nl, double nv
     private boolean unshaded(LightSource light, Vector l, Vector n, GeoPoint geopoint)
     {
         Vector lightDirection = l.scale(-1); // from point to light source

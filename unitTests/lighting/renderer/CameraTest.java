@@ -1,4 +1,4 @@
-package renderer;
+package lighting.renderer;
 
 import static org.junit.jupiter.api.Assertions.*;
 

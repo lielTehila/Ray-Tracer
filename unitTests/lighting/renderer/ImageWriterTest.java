@@ -1,7 +1,8 @@
-package renderer;
+package lighting.renderer;
 
 import org.junit.jupiter.api.Test;
 import primitives.Color;
+import renderer.ImageWriter;
 
 import static org.junit.jupiter.api.Assertions.*;
 

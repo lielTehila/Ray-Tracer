@@ -1,4 +1,4 @@
-package renderer;
+package lighting.renderer;
 
 import geometries.Intersectable;
 import geometries.Plane;
@@ -7,12 +7,12 @@ import geometries.Triangle;
 import primitives.Point;
 import primitives.Vector;
 import org.junit.jupiter.api.Test;
+import renderer.Camera;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static renderer.CameraTest.ZERO_POINT;
 
 
 public class CameraRayIntersectionsIntegrationTests {
@@ -88,7 +88,7 @@ public class CameraRayIntersectionsIntegrationTests {
     //test function for plane
     @Test
     public void PlaneFindIntersectionTests() {
-        Camera cam = new Camera(ZERO_POINT, new Vector(0, 0, 3), new Vector(0, 3, 0)).setVPSize(3, 3).setVPDistance(1);
+        Camera cam = new Camera(CameraTest.ZERO_POINT, new Vector(0, 0, 3), new Vector(0, 3, 0)).setVPSize(3, 3).setVPDistance(1);
 
         // TC01: Plane against camera 9 points
         assertCountIntersections(cam, new Plane(new Point(0, 0, 15), new Vector(0, 0, -3)), 9);
@@ -107,7 +107,7 @@ public class CameraRayIntersectionsIntegrationTests {
     //test function for triangle
     @Test
     public void TriangleFindIntersectionTests() {
-        Camera cam = new Camera(ZERO_POINT, new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPSize(3, 3).setVPDistance(1);
+        Camera cam = new Camera(CameraTest.ZERO_POINT, new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPSize(3, 3).setVPDistance(1);
         // TC01: Small triangle 1 point
         assertCountIntersections(cam, new Triangle(new Point(1, 1, -2), new Point(-1, 1, -2), new Point(0, -1, -2)), 1);
 

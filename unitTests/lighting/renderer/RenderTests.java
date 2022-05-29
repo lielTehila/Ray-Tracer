@@ -74,7 +74,7 @@
 //}
 
 
-package renderer;
+package lighting.renderer;
 
 import org.junit.jupiter.api.Test;
 

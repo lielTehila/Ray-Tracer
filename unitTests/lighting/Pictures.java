@@ -53,11 +53,15 @@ public class Pictures {
                 .setEmission(new Color(PINK));
         Geometry leftWall = new Plane(new Point(-90,0,0),new Vector(1,0,0)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(RED));
+        Geometry triangleMerrow1 = new Triangle(new Point(30,-50,-400), new Point(30,50,-500),new Point(90,50,-320))
+                .setMaterial(new Material().setkD(0.2).setKt(0.6).setkS(0.1)).setEmission(Color.BLACK);
+        Geometry triangleMerrow2 = new Triangle(new Point(80,-50,-300), new Point(40,-50,-450),new Point(90,50,-500))
+                .setMaterial(new Material().setkD(0.001).setKr(0.9).setkS(1)).setEmission(new Color(WHITE));
 //        Geometry table1 = new Triangle(new Point(0,0,-400), new Point(30,50,-400), new Point(-30,50,-20));
 ////                .setEmission(new Color(80,255,211)).setMaterial(new Material().setkD(0.2).setkS(0.5).setShininess(500).setKr(0.3));
         Geometry triangle1 = new Triangle(new Point(-25,98,-200), new Point(25,98,-200),new Point(0,98,-240))
                 .setMaterial(new Material().setkD(0.2).setKt(0.6).setkS(0.1));
-        scene.getGeometries().add(floor,ceil,frontWall,rightWall,leftWall,sphere1,triangle1);
+        scene.getGeometries().add(floor,ceil,frontWall,rightWall,leftWall,sphere1,triangle1,triangleMerrow2);
         scene.getLights().add( //
                 new SpotLight(new Color(BLUE), new Point(0, 99, -205), new Vector(0, -1, 0)) //
                         .setKl(4E-4).setKq(2E-5));
