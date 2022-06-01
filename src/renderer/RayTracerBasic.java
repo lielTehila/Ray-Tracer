@@ -166,23 +166,43 @@ public class RayTracerBasic extends RayTracer{
 //                return ZERO;
 //        }
 //        return ktr;
-//    }
+//
 
-    private Double3 transparency2(double lightDistance, Vector vl, Vector n, GeoPoint geoPoint) {
-        Ray lightRay = new Ray(geoPoint.point,vl.scale(-1),n);
-        List<GeoPoint> intersections = scene.getGeometries().findGeoIntersections(lightRay,lightDistance);
-        if(intersections == null){
-            return new Double3(1d);
+    private Double3 transparency(double maxDistance, Vector l, Vector n, GeoPoint geoPoint){
+        Vector lightDirection = l.scale(-1);
+        Point point = geoPoint.point;
+        Ray lightRay = new Ray(point,lightDirection, n);
+        //double maxDistance = lightSource.getDistance(point);
+
+        List<GeoPoint> intersection = scene.getGeometries().findGeoIntersections(lightRay, maxDistance);
+        if(intersection==null){
+            return Double3.ONE;
         }
-        Double3 shadowK= Double3.ONE;
-        for(GeoPoint gp : intersections){
-            shadowK = shadowK.product(gp.geometry.getMaterial().kT);
-            if (shadowK.lowerThan(MIN_CALC_COLOR_K)){
-                return shadowK;
-            }
+
+        Double3 ktr = Double3.ONE;
+        for(var geo:intersection){
+            ktr = ktr.product(geo.geometry.getMaterial().kT);
+            if (ktr.lowerThan(MIN_CALC_COLOR_K))
+                return ZERO;
         }
-        return shadowK;
+        return ktr;
     }
+
+//    private Double3 transparency2(double lightDistance, Vector vl, Vector n, GeoPoint geoPoint) {
+//        Ray lightRay = new Ray(geoPoint.point,vl.scale(-1),n);
+//        List<GeoPoint> intersections = scene.getGeometries().findGeoIntersections(lightRay,lightDistance);
+//        if(intersections == null){
+//            return new Double3(1d);
+//        }
+//        Double3 shadowK= Double3.ONE;
+//        for(GeoPoint gp : intersections){
+//            shadowK = shadowK.product(gp.geometry.getMaterial().kT);
+//            if (shadowK.lowerThan(MIN_CALC_COLOR_K)){
+//                return shadowK;
+//            }
+//        }
+//        return shadowK;
+//    }
 
     private Double3 transparencyOur( GeoPoint geoPoint , LightSource lightSource, Vector n) {
         Double3 ktr;
@@ -191,7 +211,7 @@ public class RayTracerBasic extends RayTracer{
         for (Vector vl : beamL) {
             Point vecToPnt= new Point(vl.get_x(), vl.get_y(), vl.get_z());
             double lightDistance = geoPoint.point.distance(vecToPnt);
-            tempKtr = tempKtr.add( transparency2(2*lightDistance, vl, n, geoPoint));
+            tempKtr = tempKtr.add( transparency(2*lightDistance, vl, n, geoPoint));
         }
         ktr = tempKtr.reduce( beamL.size());
 

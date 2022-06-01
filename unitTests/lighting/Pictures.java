@@ -72,7 +72,7 @@ public class Pictures {
 //        scene.getLights().add(new DirectionalLight(new Color(221,11,255), new Vector(50, -7, -0.5)));
 
 
-        ImageWriter imageWriter = new ImageWriter("OurFirstPictureShadow", 500, 500);
+        ImageWriter imageWriter = new ImageWriter("OurFirstPictureShadow2", 500, 500);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
                 .renderImage() //
