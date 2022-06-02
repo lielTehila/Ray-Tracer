@@ -26,7 +26,7 @@ public class Pictures {
                 //.setBackground(new Color(184,255,154))
                 .build();
 
-        Camera camera = new Camera(new Point(0, 0, 1300), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+        Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setVPSize(200, 200) //
                 .setVPDistance(1000);
 
@@ -44,30 +44,30 @@ public class Pictures {
                 .setEmission(new Color(BLACK));
         Geometry besideWall = new Plane(new Point(0,0,1300),new Vector(0,0,1)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(255,195,96));
-        Geometry rightWall = new Plane(new Point(90,0,0),new Vector(1,0,0)).setMaterial(new Material().setkD(1))
-                .setEmission(new Color(RED));
-        Geometry leftWall = new Plane(new Point(-90,0,0),new Vector(1,0,0)).setMaterial(new Material().setkD(1))
-                .setEmission(new Color(RED));
+        Geometry rightWall = new Plane(new Point(90,0,0),new Vector(1,0,0)).setMaterial(new Material().setkD(0.6))
+                .setEmission(new Color(RED).reduce(1.2));
+        Geometry leftWall = new Plane(new Point(-90,0,0),new Vector(1,0,0)).setMaterial(new Material().setkD(0.6))
+                .setEmission(new Color(RED).reduce(1.2));
 
-        Geometry sphere1 = new Sphere(new Point(-50, -30, -200), 20d)
-                .setEmission(new Color(RED).reduce(2))
+        Geometry sphere1 = new Sphere(new Point(-50, -35, -200), 15d)
+                .setEmission(new Color(75,255,40))
                 .setMaterial(new Material().setkD(1));
-        Geometry sphere2 = new Sphere(new Point(25, -20, 25), 30d)
-                .setEmission(new Color(RED).reduce(2))
-                .setMaterial(new Material().setkD(1));
-        Geometry sphere3 = new Sphere(new Point(0,100,0), 20d)
-                .setEmission(new Color(PINK).reduce(2)) //blue
-                .setMaterial(new Material().setkD(1));
+        Geometry sphere2 = new Sphere(new Point(25, -30, 25), 20d)
+                .setEmission(new Color(BLUE))
+                .setMaterial(new Material().setkD(0.5).setKt(0.5));
+        Geometry sphereLamp = new Sphere(new Point(0,100,0), 20d)
+                .setEmission(new Color(249,255,195))
+                .setMaterial(new Material().setKt(0.2).setkD(0.8));
 
-        scene.getGeometries().add(floor,ceil,frontWall,besideWall,rightWall,leftWall,sphere1,sphere2,sphere3);
+        scene.getGeometries().add(floor,ceil,frontWall,besideWall,rightWall,leftWall,sphere1,sphere2,sphereLamp);
 //        scene.getLights().add( //
 //                new SpotLight(new Color(BLUE), new Point(0, 99, -205), new Vector(0, 1, 0)) //
 //                        .setKl(4E-4).setKq(2E-5));
-        scene.getLights().add(new SpotLight(new Color(GREEN),new Point(0, 80, 300), new Vector(0, -1, -5))
-               .setKl(0.0001)
-               .setKq(0.0001));
-        //scene.getLights().add(new PointLight(new Color(GREEN), new Point(0,90,50)).setKl(0.0001).setKq(0.0005));
-        //scene.getLights().add(new PointLight(new Color(RED), new Point(0,90,1100)).setKl(0.0001).setKq(0.00002));
+//        scene.getLights().add(new SpotLight(new Color(GREEN),new Point(0, 80, 300), new Vector(0, -1, -5))
+//               .setKl(0.0001)
+//               .setKq(0.0001));
+        scene.getLights().add(new PointLight(new Color(WHITE), new Point(0,50,1200)).setKl(0.0001).setKq(0.0005));
+        scene.getLights().add(new SpotLight(new Color(249,255,195), new Point(0,90,0),new Vector(0,-1,0)).setKl(4E-5).setKq(2E-7));
 //        scene.getLights().add(new DirectionalLight(new Color(221,11,255), new Vector(50, -7, -0.5)));
 
 
@@ -77,6 +77,10 @@ public class Pictures {
                 .renderImage() //
                 .writeToImage(); //
     }
+
+
+
+
 
 
     @Test
