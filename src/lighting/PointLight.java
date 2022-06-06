@@ -154,15 +154,15 @@ public class PointLight extends Light  implements LightSource{
             y = range * sinTheta;
 
             if (x != 0) {
-                newPoint = newPoint.add(normalX.scale(x).normalize());
+                newPoint = newPoint.add(normalX.scale(x));
             }
 
             if (y != 0) {
-                newPoint = newPoint.add(normalY.scale(y).normalize());
+                newPoint = newPoint.add(normalY.scale(y));
             }
 
-            //beam.add(point.subtract(newPoint).normalize());
-            beam.add(this.getL(newPoint));
+            beam.add(point.subtract(newPoint).normalize());
+            //beam.add(this.getL(newPoint));
         }
         return beam;
     }
