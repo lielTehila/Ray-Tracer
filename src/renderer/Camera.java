@@ -214,6 +214,7 @@ public class Camera {
      * @param i -The number of pixels to move in a column
      * @param j-The number of pixels to move in a row
      */
+    //שיפור פיקסל
 //    private void castRay(int Nx, int Ny, int i, int j) {
 //        //improving of anti-aliasing
 //        int bigNy = 9*Ny;
@@ -221,6 +222,7 @@ public class Camera {
 //        Color pixelColor=new Color(java.awt.Color.BLACK);
 //        for (int iColumn = i*9; iColumn < i*9+9; iColumn++) {
 //            for (int jRow = j*9; jRow < j*9+9; jRow++) {
+//
 //                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
 //                pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
 //            }
@@ -228,11 +230,75 @@ public class Camera {
 //        pixelColor=pixelColor.reduce(81);
 //        imageWriter.writePixel(j, i, pixelColor);
 //    }
+    // של פיקסל שיפור ריצה
     private void castRay(int Nx, int Ny, int i, int j) {
-        Ray ray = constructRay(Nx, Ny, j, i);
-        Color pixelColor = rayTracer.traceRay(ray);
+        //improving of anti-aliasing
+        int bigNy = 2*Ny;
+        int bigNx = 2*Nx;
+        Ray middleRay = constructRay(Nx, Ny, j, i);
+        Color pixelColor=new Color(java.awt.Color.BLACK);
+        pixelColor =pixelColor.add(rayTracer.traceRay(middleRay)) ;
+        Point m=new Point(rayTracer.traceRay(middleRay).getColor().getBlue(),rayTracer.traceRay(middleRay).getColor().getGreen(),rayTracer.traceRay(middleRay).getColor().getRed());
+
+        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
+            for (int jRow = j*2; jRow < j*2+2; jRow++) {
+                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+                Point r=new Point(rayTracer.traceRay(ray).getColor().getBlue(),rayTracer.traceRay(ray).getColor().getGreen(),rayTracer.traceRay(ray).getColor().getRed());
+                if(m.distance(r)>10)
+                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow,rayTracer.traceRay(ray)));
+                else
+                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
+            }
+        }
+        pixelColor=pixelColor.reduce(5);
         imageWriter.writePixel(j, i, pixelColor);
     }
+    private Color castRayHelp(int Nx, int Ny, int i, int j,Color pixelColor) {
+        int bigNy = 2*Ny;
+        int bigNx = 2*Nx;
+        Ray middleRay = constructRay(Nx, Ny, j, i);
+        Point m=new Point(rayTracer.traceRay(middleRay).getColor().getBlue(),rayTracer.traceRay(middleRay).getColor().getGreen(),rayTracer.traceRay(middleRay).getColor().getRed());
+        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
+            for (int jRow = j*2; jRow < j*2+2; jRow++) {
+                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+                Point r=new Point(rayTracer.traceRay(ray).getColor().getBlue(),rayTracer.traceRay(ray).getColor().getGreen(),rayTracer.traceRay(ray).getColor().getRed());
+                if(m.distance(r)>10)
+                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow,rayTracer.traceRay(ray))) ;
+                else
+                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
+            }
+        }
+        pixelColor=pixelColor.reduce(5);
+        return pixelColor;
+    }
+    //2
+//    private Color castRayHelp(int Nx, int Ny, int i, int j) {
+//        int bigNy = 2*Ny;
+//        int bigNx = 2*Nx;
+//        Ray middleRay = constructRay(Nx, Ny, j, i);
+//        Color pixelColor=new Color(java.awt.Color.BLACK);
+//        pixelColor =pixelColor.add(rayTracer.traceRay(middleRay)) ;
+//        Point m=new Point(rayTracer.traceRay(middleRay).getColor().getBlue(),rayTracer.traceRay(middleRay).getColor().getGreen(),rayTracer.traceRay(middleRay).getColor().getRed());
+//
+//        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
+//            for (int jRow = j*2; jRow < j*2+2; jRow++) {
+//                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+//                Point r=new Point(rayTracer.traceRay(ray).getColor().getBlue(),rayTracer.traceRay(ray).getColor().getGreen(),rayTracer.traceRay(ray).getColor().getRed());
+//                if(m.distance(r)>10)
+//                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow)) ;
+//                else
+//                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
+//            }
+//        }
+//        pixelColor=pixelColor.reduce(5);
+//        return pixelColor;
+//    }
+    //רגיל
+//    private void castRay(int Nx, int Ny, int i, int j) {
+//        Ray ray = constructRay(Nx, Ny, j, i);
+//        Color pixelColor = rayTracer.traceRay(ray);
+//        imageWriter.writePixel(j, i, pixelColor);
+//    }
 
     public Camera writeToImage() {
         imageWriter.writeToImage();

@@ -46,7 +46,7 @@ public class ShadowTests {
 	 */
 	@Test
 	public void sphereTriangleInitial() {
-		sphereTriangleHelper("shadowSphereTriangleInitial", //
+		sphereTriangleHelper("shadowSphereTriangleInitial3", //
 				new Triangle(new Point(-70, -40, 0), new Point(-40, -70, 0), new Point(-68, -68, -4)), //
 				new Point(-100, -100, 200));
 	}

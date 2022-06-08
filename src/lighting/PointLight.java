@@ -84,86 +84,118 @@ public class PointLight extends Light  implements LightSource{
     }
 
     @Override
-    public List<Vector> getListRound(Point point, double beamRadius, double SsRayCounter)
+    public List<Vector> getListRound(Point p, double _radius, double SsRayCounter)
     {
-        List<Vector> beam = new LinkedList<>();
+        Random r = new Random();
+        List<Vector> vectors = new LinkedList();
+        for (double i = -_radius; i < _radius; i += _radius / 10) {
+            for (double j = -_radius; j < _radius; j += _radius / 10) {
+                if (i != 0 && j != 0) {
+                    Point point = position.add(new Vector(i, 0.1d, j));
 
-        // first we'll add the vector from the point to the position of the pointLight
-        Vector v = this.getL(point);
-        beam.add(v);
+                    if (point.equals(position)){
+                        vectors.add(p.subtract(point).normalize());
+                    }
+                    else{
+                        try{
+                            if (point.subtract(position).dotProduct(point.subtract(position)) <= _radius * _radius){
+                                vectors.add(p.subtract(point).normalize());
+                            }
+                        }
+                        catch (Exception e){
+                            vectors.add(p.subtract(point).normalize());
+                        }
 
-        // if the ray counter is less than 2 then there is only one vector
-        // the vector v we've calculated above
-        if (SsRayCounter <= 1) {
-            return beam;
-        }
+                    }
+                }
 
-        // the distance between the point and the point light
-        double distance = this.position.distance(point);
-
-        // the distance can't be zero
-        if (isZero(distance)) {
-            throw new IllegalArgumentException("distance cannot be 0");
-        }
-
-        Vector normalX;
-
-        // if v = (0,0,z) then the normal of x is (-z,0,0)
-        // else the normal of x is (-y,x,0)
-        if (v.get_x() == 0 && v.get_y() == 0) {
-            normalX = new Vector(v.get_z() * -1, 0, 0).normalize();
-        }
-        else {
-            normalX = new Vector(v.get_y() * -1, v.get_x(), 0).normalize();
-        }
-
-        // the normal for y will be the cross product between v and the normal of x
-        Vector normalY = v.crossProduct(normalX).normalize();
-
-        // cos($), sin($)
-        double cosTheta, sinTheta;
-
-        // x,y values of the points in the beam
-        double x, y;
-
-        // the point that help us create the vectors to the beam
-        Point newPoint;
-        Random rand = new Random();
-
-        // a loop to create SsRayCounter amount of vectors in the given beamRadius
-        for (int i = 0; i < SsRayCounter; i++) {
-            newPoint = this.position; // initialize with the point light's position
-
-            // we chose random cos($), sin($) between -1 and 1
-            cosTheta = 2 * rand.nextDouble() - 1;
-
-            // sin ^ 2 + cos ^ 2 = 1
-            sinTheta = Math.sqrt(1d - cosTheta * cosTheta);
-
-            // range is a random number < |beamRadius|
-            double range = beamRadius * (2 * rand.nextDouble() - 1);
-
-            // if its zero then the new vector will be equal to v - so we'll ignore this, and continue
-            if (range == 0) {
-                i--;
-                continue;
             }
-
-            // define the x,y values inside the radius
-            x = range * cosTheta;
-            y = range * sinTheta;
-
-            if (x != 0) {
-                newPoint = newPoint.add(normalX.scale(x));
-            }
-
-            if (y != 0) {
-                newPoint = newPoint.add(normalY.scale(y));
-            }
-
-            beam.add(point.subtract(newPoint).normalize());
-            //beam.add(this.getL(newPoint));
         }
-        return beam;
+        vectors.add(getL(p));
+        return vectors;
     }
 }
+// @Override
+//    public List<Vector> getListRound(Point point, double beamRadius, double SsRayCounter)
+//    {
+//        List<Vector> beam = new LinkedList<>();
+//
+//        // first we'll add the vector from the point to the position of the pointLight
+//        Vector v = this.getL(point);
+//        beam.add(v);
+//
+//        // if the ray counter is less than 2 then there is only one vector
+//        // the vector v we've calculated above
+//        if (SsRayCounter <= 1) {
+//            return beam;
+//        }
+//
+//        // the distance between the point and the point light
+//        double distance = this.position.distance(point);
+//
+//        // the distance can't be zero
+//        if (isZero(distance)) {
+//            throw new IllegalArgumentException("distance cannot be 0");
+//        }
+//
+//        Vector normalX;
+//
+//        // if v = (0,0,z) then the normal of x is (-z,0,0)
+//        // else the normal of x is (-y,x,0)
+//        if (v.get_x() == 0 && v.get_y() == 0) {
+//            normalX = new Vector(v.get_z() * -1, 0, 0).normalize();
+//        }
+//        else {
+//            normalX = new Vector(v.get_y() * -1, v.get_x(), 0).normalize();
+//        }
+//
+//        // the normal for y will be the cross product between v and the normal of x
+//        Vector normalY = v.crossProduct(normalX).normalize();
+//
+//        // cos($), sin($)
+//        double cosTheta, sinTheta;
+//
+//        // x,y values of the points in the beam
+//        double x, y;
+//
+//        // the point that help us create the vectors to the beam
+//        Point newPoint;
+//        Random rand = new Random();
+//
+//        // a loop to create SsRayCounter amount of vectors in the given beamRadius
+//        for (int i = 0; i < SsRayCounter; i++) {
+//            newPoint = this.position; // initialize with the point light's position
+//
+//            // we chose random cos($), sin($) between -1 and 1
+//            cosTheta = 2 * rand.nextDouble() - 1;
+//
+//            // sin ^ 2 + cos ^ 2 = 1
+//            sinTheta = Math.sqrt(1d - cosTheta * cosTheta);
+//
+//            // range is a random number < |beamRadius|
+//            double range = beamRadius * (2 * rand.nextDouble() - 1);
+//
+//            // if its zero then the new vector will be equal to v - so we'll ignore this, and continue
+//            if (range == 0) {
+//                i--;
+//                continue;
+//            }
+//
+//            // define the x,y values inside the radius
+//            x = range * cosTheta;
+//            y = range * sinTheta;
+//
+//            if (x != 0) {
+//                newPoint = newPoint.add(normalX.scale(x));
+//            }
+//
+//            if (y != 0) {
+//                newPoint = newPoint.add(normalY.scale(y));
+//            }
+//
+//            beam.add(point.subtract(newPoint).normalize());
+//            //beam.add(this.getL(newPoint));
+//        }
+//        return beam;
+//    }
+//}

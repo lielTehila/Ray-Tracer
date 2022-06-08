@@ -125,7 +125,10 @@ public class RayTracerBasic extends RayTracer{
             Vector l = lightSource.getL(point);
             double nl = alignZero(n.dotProduct(l));
             if (nl * nv > 0) {
-                Double3 ktr = transparency(gp, lightSource, l, n);
+//                private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n)
+                //private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n)
+                Double3 ktr = transparencyBeam(gp, lightSource, l);
+//                Double3 ktr = transparency(gp, lightSource, l, n);
                 if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
                     //if(unshaded(lightSource,l,n,gp)) {
                     //Color iL = lightSource.getIntensity(point);
@@ -148,6 +151,7 @@ public class RayTracerBasic extends RayTracer{
      * @return the level of the transparency
      */
     private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n){
+
         Vector lightDirection = l.scale(-1);
         Point point = geoPoint.point;
         Ray lightRay = new Ray(point,lightDirection, n);
@@ -165,23 +169,6 @@ public class RayTracerBasic extends RayTracer{
                 return ZERO;
         }
         return ktr;
-//        Vector lightDirection = l.scale(-1);
-//        Point point = geoPoint.point;
-//        Ray lightRay = new Ray(point,lightDirection, n);
-//        double maxDistance = lightSource.getDistance(point);
-//
-//        List<GeoPoint> intersection = scene.getGeometries().findGeoIntersections(lightRay, maxDistance);
-//        if(intersection==null){
-//            return Double3.ONE;
-//        }
-//
-//        Double3 ktr = Double3.ONE;
-//        for(var geo:intersection){
-//            ktr = ktr.product(geo.geometry.getMaterial().kT);
-//            if (ktr.lowerThan(MIN_CALC_COLOR_K))
-//                return ZERO;
-//        }
-//        return ktr;
     }
 
 
@@ -251,10 +238,6 @@ public class RayTracerBasic extends RayTracer{
         return material.getkS().scale(Math.pow(-1d * vr,material.getShininess()));
     }
 
-
-
-
-
     /**
      * find the closest geo point
      * @param ray the ray that create intersection points
@@ -270,4 +253,36 @@ public class RayTracerBasic extends RayTracer{
     }
 
 
+
+
+    //שינויים בשביל soft shadow
+    private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n) {
+        Double3 ktr;
+        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 10, 10);
+        Double3 tempKtr = Double3.ZERO;
+        for (Vector vl : beamL) {
+            Point vecToPnt= new Point(vl.get_x(), vl.get_y(), vl.get_z());
+            double lightDistance = geoPoint.point.distance(vecToPnt);
+            tempKtr = tempKtr.add( transparency(geoPoint,lightSource, vl, n));
+        }
+        ktr = tempKtr.reduce( beamL.size());
+
+        return ktr;
+    }
+
+    private Double3 transparency2(double lightDistance, Vector vl, Vector n, GeoPoint geoPoint) {
+        Ray lightRay = new Ray(geoPoint.point,vl.scale(-1),n);
+        List<GeoPoint> intersections = scene.getGeometries().findGeoIntersections(lightRay,lightDistance);
+        if(intersections == null){
+            return new Double3(1d);
+        }
+        Double3 shadowK= Double3.ONE;
+        for(GeoPoint gp : intersections){
+            shadowK = shadowK.product(gp.geometry.getMaterial().kT);
+            if (shadowK.lowerThan(MIN_CALC_COLOR_K)){
+                return shadowK;
+            }
+        }
+        return shadowK;
+    }
 }
