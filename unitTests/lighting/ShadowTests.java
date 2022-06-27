@@ -46,7 +46,11 @@ public class ShadowTests {
 	 */
 	@Test
 	public void sphereTriangleInitial() {
-		sphereTriangleHelper("shadowSphereTriangleInitial3", //
+		//4 בלי שיפורים
+		// 1 בלי שיפור ריתה 3 עם
+		//5  soft shadow
+		//2 שיפור פיקסל+צללים בלי זמן ריצה לתרגיל 8
+		sphereTriangleHelper("shadowSphereTriangleInitial2", //
 				new Triangle(new Point(-70, -40, 0), new Point(-40, -70, 0), new Point(-68, -68, -4)), //
 				new Point(-100, -100, 200));
 	}

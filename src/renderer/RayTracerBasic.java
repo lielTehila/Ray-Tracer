@@ -125,10 +125,10 @@ public class RayTracerBasic extends RayTracer{
             Vector l = lightSource.getL(point);
             double nl = alignZero(n.dotProduct(l));
             if (nl * nv > 0) {
-//                private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n)
-                //private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n)
-                Double3 ktr = transparencyBeam(gp, lightSource, l);
-//                Double3 ktr = transparency(gp, lightSource, l, n);
+//                private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n) //למחוק?
+                //private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n)//למחוק?
+                Double3 ktr = transparencyBeam(gp, lightSource, l);// soft shadow   //בלי שיפור זמן ריצה מתאים לתרגיל 8
+                //Double3 ktr = transparency(gp, lightSource, l, n);//בלי שיפור soft shadow
                 if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
                     //if(unshaded(lightSource,l,n,gp)) {
                     //Color iL = lightSource.getIntensity(point);
@@ -270,19 +270,4 @@ public class RayTracerBasic extends RayTracer{
         return ktr;
     }
 
-    private Double3 transparency2(double lightDistance, Vector vl, Vector n, GeoPoint geoPoint) {
-        Ray lightRay = new Ray(geoPoint.point,vl.scale(-1),n);
-        List<GeoPoint> intersections = scene.getGeometries().findGeoIntersections(lightRay,lightDistance);
-        if(intersections == null){
-            return new Double3(1d);
-        }
-        Double3 shadowK= Double3.ONE;
-        for(GeoPoint gp : intersections){
-            shadowK = shadowK.product(gp.geometry.getMaterial().kT);
-            if (shadowK.lowerThan(MIN_CALC_COLOR_K)){
-                return shadowK;
-            }
-        }
-        return shadowK;
-    }
 }
