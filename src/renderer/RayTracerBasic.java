@@ -127,8 +127,8 @@ public class RayTracerBasic extends RayTracer{
             if (nl * nv > 0) {
 //                private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n) //למחוק?
                 //private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n)//למחוק?
-                Double3 ktr = transparencyBeam(gp, lightSource, l);// soft shadow   //בלי שיפור זמן ריצה מתאים לתרגיל 8
-                //Double3 ktr = transparency(gp, lightSource, l, n);//בלי שיפור soft shadow
+                //Double3 ktr = transparencyBeam(gp, lightSource, l);// soft shadow   //בלי שיפור זמן ריצה מתאים לתרגיל 8
+                Double3 ktr = transparency(gp, lightSource, l, n);//בלי שיפור soft shadow
                 if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
                     //if(unshaded(lightSource,l,n,gp)) {
                     //Color iL = lightSource.getIntensity(point);

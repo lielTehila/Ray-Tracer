@@ -1,4 +1,4 @@
-package lighting.renderer;
+package renderer;
 
 import geometries.Intersectable;
 import geometries.Plane;
@@ -7,7 +7,6 @@ import geometries.Triangle;
 import primitives.Point;
 import primitives.Vector;
 import org.junit.jupiter.api.Test;
-import renderer.Camera;
 
 import java.util.LinkedList;
 import java.util.List;

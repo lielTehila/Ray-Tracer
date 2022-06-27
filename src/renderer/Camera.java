@@ -265,27 +265,27 @@ public class Camera {
 //        imageWriter.writePixel(j, i, pixelColor);
 //    }
     //   שיפור ריצה של הזמן
-    private void castRay(int Nx, int Ny, int i, int j) {
-        //improving of anti-aliasing
-        int bigNy = 2*Ny;
-        int bigNx = 2*Nx;
-        Ray middleRay = constructRay(Nx, Ny, j, i);
-        Color pixelColor=new Color(java.awt.Color.BLACK);
-        pixelColor =pixelColor.add(rayTracer.traceRay(middleRay)) ;
-        java.awt.Color c1=rayTracer.traceRay(middleRay).getColor();
-        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
-            for (int jRow = j*2; jRow < j*2+2; jRow++) {
-                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
-                java.awt.Color c2=rayTracer.traceRay(ray).getColor();
-                if(Math.abs(c1.getBlue()-c2.getBlue())>5&&Math.abs(c1.getGreen()-c2.getGreen())>5&&Math.abs(c1.getRed()-c2.getRed())>5)
-                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow,rayTracer.traceRay(ray)));
-                else
-                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
-            }
-        }
-        pixelColor=pixelColor.reduce(5);
-        imageWriter.writePixel(j, i, pixelColor);
-    }
+//    private void castRay(int Nx, int Ny, int i, int j) {
+//        //improving of anti-aliasing
+//        int bigNy = 2*Ny;
+//        int bigNx = 2*Nx;
+//        Ray middleRay = constructRay(Nx, Ny, j, i);
+//        Color pixelColor=new Color(java.awt.Color.BLACK);
+//        pixelColor =pixelColor.add(rayTracer.traceRay(middleRay)) ;
+//        java.awt.Color c1=rayTracer.traceRay(middleRay).getColor();
+//        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
+//            for (int jRow = j*2; jRow < j*2+2; jRow++) {
+//                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+//                java.awt.Color c2=rayTracer.traceRay(ray).getColor();
+//                if(Math.abs(c1.getBlue()-c2.getBlue())>5&&Math.abs(c1.getGreen()-c2.getGreen())>5&&Math.abs(c1.getRed()-c2.getRed())>5)
+//                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow,rayTracer.traceRay(ray)));
+//                else
+//                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
+//            }
+//        }
+//        pixelColor=pixelColor.reduce(5);
+//        imageWriter.writePixel(j, i, pixelColor);
+//    }
     private Color castRayHelp(int Nx, int Ny, int i, int j,Color pixelColor) {
         int bigNy = 2*Ny;
         int bigNx = 2*Nx;
@@ -306,11 +306,11 @@ public class Camera {
     }
 
     //בלי שיפורים של תצוגה וריצה
-//    private void castRay(int Nx, int Ny, int i, int j) {
-//        Ray ray = constructRay(Nx, Ny, j, i);
-//        Color pixelColor = rayTracer.traceRay(ray);
-//        imageWriter.writePixel(j, i, pixelColor);
-//    }
+    private void castRay(int Nx, int Ny, int i, int j) {
+        Ray ray = constructRay(Nx, Ny, j, i);
+        Color pixelColor = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, pixelColor);
+    }
 
     public Camera writeToImage() {
         imageWriter.writeToImage();

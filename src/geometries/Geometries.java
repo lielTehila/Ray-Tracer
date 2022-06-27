@@ -8,13 +8,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Geometries extends Intersectable {
-
+    /**
+     * return list of shapes
+     */
     private List<Intersectable> shapes = null;
 
+    /**
+     * b
+     */
     public Geometries() {
         shapes = new LinkedList<>();
     }
 
+    /**
+     *
+     * @param geometries
+     */
     public Geometries(Intersectable... geometries) {
         this();
         add(geometries);
