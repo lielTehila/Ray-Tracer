@@ -171,6 +171,27 @@ public class RayTracerBasic extends RayTracer{
         return ktr;
     }
 
+    /**
+     *Match to soft shadow
+     * @param geoPoint point of geometry
+     * @param lightSource the light object
+     * @param n normal to the geo point
+     * @return the level of the transparency
+     */
+    private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n) {
+        Double3 ktr;
+        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 10, 10);
+        Double3 tempKtr = Double3.ZERO;
+        for (Vector vl : beamL) {
+//            Point vecToPnt= new Point(vl.get_x(), vl.get_y(), vl.get_z());
+//            double lightDistance = geoPoint.point.distance(vecToPnt);
+            tempKtr = tempKtr.add( transparency(geoPoint,lightSource, vl, n));
+        }
+        ktr = tempKtr.reduce( beamL.size());
+
+        return ktr;
+    }
+
 
     /**
      * Checking for shading between a point and the light source //geometric point being examined for non-shading between the point and the light source
@@ -200,8 +221,6 @@ public class RayTracerBasic extends RayTracer{
             }
         }
         return  true;
-
-        //return intersections==null;
     }
     /**
      * calc the diffusive light effect on the specific point
@@ -255,19 +274,6 @@ public class RayTracerBasic extends RayTracer{
 
 
 
-    //שינויים בשביל soft shadow
-    private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n) {
-        Double3 ktr;
-        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 10, 10);
-        Double3 tempKtr = Double3.ZERO;
-        for (Vector vl : beamL) {
-            Point vecToPnt= new Point(vl.get_x(), vl.get_y(), vl.get_z());
-            double lightDistance = geoPoint.point.distance(vecToPnt);
-            tempKtr = tempKtr.add( transparency(geoPoint,lightSource, vl, n));
-        }
-        ktr = tempKtr.reduce( beamL.size());
 
-        return ktr;
-    }
 
 }
