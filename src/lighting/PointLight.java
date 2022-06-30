@@ -14,14 +14,30 @@ import java.util.List;
 
 import static primitives.Util.isZero;
 
+/**
+ * The department represents point light.
+ */
 public class PointLight extends Light  implements LightSource{
+
+    /**
+     *The position of the point in space
+     */
     private final Point position;
+    /**
+     *Parameters of the light
+     */
     private Double3 kC;
+    /**
+     *Parameters of the light
+     */
     private Double3 kL;
+    /**
+     *Parameters of the light
+     */
     private Double3 kQ;
 
     /***
-     * constractor with default values for the discount factors
+     * constructor with default values for the discount factors
      * @param intensity intensity color
      * @param p the position of the light
      */
@@ -33,29 +49,55 @@ public class PointLight extends Light  implements LightSource{
         kQ = new Double3(0);
     }
 
+    /**
+     * @param kc parameters of the light
+     * @return this
+     */
     public PointLight setKc(Double3 kc) {
         this.kC = kc;
         return this;
     }
+
+    /**
+     * @param kc parameters of the light
+     * @return this
+     */
     public PointLight setKc(double kc) {
         this.kC = new Double3(kc);
         return this;
     }
 
+    /**
+     * @param kl parameters of the light
+     * @return this
+     */
     public PointLight setKl(Double3 kl) {
         this.kL = kl;
         return this;
     }
 
+    /**
+     * @param kl parameters of the light
+     * @return this
+     */
     public PointLight setKl(double kl) {
         this.kL = new Double3(kl);
         return this;
     }
 
+    /**
+     * @param kq parameters of the light
+     * @return this
+     */
     public PointLight setKq(Double3 kq) {
         this.kQ = kq;
         return this;
     }
+
+    /**
+     * @param kq parameters of the light
+     * @return this
+     */
     public PointLight setKq(double kq) {
         this.kQ = new Double3(kq);
         return this;

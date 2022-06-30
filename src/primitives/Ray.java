@@ -6,12 +6,25 @@ import geometries.Intersectable.GeoPoint;
 
 import static primitives.Util.isZero;
 
+/**
+ * The department represents a Ray.
+ */
 public class Ray {
+    /**
+     * The point of ray
+     */
     final private Point p0;
+    /**
+     * The direction vector of the ray
+     */
     final private Vector dir;
-    private static final double DELTA = 0.1; //Fixed for first moving magnitude rays for shading rays
+    /**
+     * Fixed for first moving magnitude rays for shading rays
+     */
+    private static final double DELTA = 0.1;
+
     /***
-     * constractor with params
+     * constructor with params
      * @param  p-Point
      * @param d-Vector
      */
@@ -21,18 +34,12 @@ public class Ray {
         dir=new Vector(d.get_xyz()).normalize() ;
     }
 
-    /***
-     * print the elements
-     * @return string
+    /**
+     * Constructor with parameters.
+     * @param point The point of ray
+     * @param direction The direction vector of the ray
+     * @param normal
      */
-    @Override
-    public String toString() {
-        return "Ray{" +
-                "p0=" + p0 +
-                ", dir=" + dir +
-                '}';
-    }
-
     public Ray(Point point, Vector direction, Vector normal) {
         //point + normal.scale(±EPSILON)
         this.dir = direction.normalize();
@@ -40,15 +47,14 @@ public class Ray {
         Vector normalDelta = normal.scale((nv > 0 ? DELTA : -DELTA));
         this.p0 = point.add(normalDelta);
     }
+
     /***
-     *
      * @return p0
      */
     public Point getP0() {
         return p0;
     }
     /***
-     *
      * @return dir
      */
     public Vector getDir() {
@@ -56,7 +62,6 @@ public class Ray {
     }
 
     /***
-     *
      * @param d-object to compare
      * @return true if they are equal
      */
@@ -65,14 +70,6 @@ public class Ray {
             return p0;
         }
         return p0.add(dir.scale(d));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ray ray = (Ray) o;
-        return Objects.equals(p0, ray.p0) && Objects.equals(dir, ray.dir);
     }
 
     /**
@@ -85,26 +82,11 @@ public class Ray {
                 : findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()).point;
     }
 
-//    public Point findClosestPoint (List<Point> lst)
-//    {
-//        if (lst==null||lst.isEmpty())
-//            return null;
-//
-//        double min= p0.distance(lst.get(0));
-//        Point pMin= lst.get(0);
-//        lst.remove(0);
-//
-//        while(!lst.isEmpty()){
-//            Point p=lst.get(0);
-//            double length = p0.distance(p);
-//            if (length<min){
-//                min=length;
-//                pMin = lst.get(0);
-//            }
-//            lst.remove(0);
-//        }
-//        return pMin;
-//    }
+    /**
+     * The function finds the nearest point.
+     * @param lst List of points.
+     * @return The nearest point.
+     */
     public GeoPoint findClosestGeoPoint (List<GeoPoint> lst)
     {
         if (lst==null||lst.isEmpty())
@@ -125,10 +107,21 @@ public class Ray {
         }
         return pMin;
     }
-    /*
+
     @Override
-    public int hashCode() {
-        return Objects.hash(p0, dir);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ray ray = (Ray) o;
+        return Objects.equals(p0, ray.p0) && Objects.equals(dir, ray.dir);
     }
-     */
+
+    @Override
+    public String toString() {
+        return "Ray{" +
+                "p0=" + p0 +
+                ", dir=" + dir +
+                '}';
+    }
+
 }

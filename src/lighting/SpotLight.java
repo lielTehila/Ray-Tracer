@@ -7,11 +7,17 @@ import primitives.Vector;
 
 import static primitives.Util.alignZero;
 
+/**
+ * The department represents spot lighting.
+ */
 public class SpotLight extends PointLight {
+    /**
+     * Vector lighting direction.
+     */
     private Vector direction;
 
     /***
-     * primary constractor
+     * primary constructor
      * @param direction the direction of the light
      * @param intensity intensity color
      * @param point the position of the light
@@ -20,17 +26,6 @@ public class SpotLight extends PointLight {
         super(intensity, point);
         this.direction = direction.normalize();
     }
-
-//    /***
-//
-//     * @param d direction of the light
-//     * @param intensity intensity of the light
-//     * @param p position of the light source
-//     */
-//    public SpotLight(Vector d, Color intensity, Point p) {
-//        super(intensity, p);
-//        direction = d.normalize();
-//    }
 
     @Override
     public Color getIntensity(Point p) {

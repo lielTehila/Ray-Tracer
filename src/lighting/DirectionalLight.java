@@ -6,6 +6,9 @@ import primitives.Vector;
 
 import java.util.List;
 
+/**
+ * Directional lighting, has no source but only direction.
+ */
 public class DirectionalLight extends Light implements LightSource {
     private Vector direction;
     /***

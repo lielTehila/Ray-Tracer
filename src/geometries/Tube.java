@@ -5,10 +5,26 @@ import primitives.Vector;
 
 import java.util.List;
 
+/**
+ * The class represents tube.
+ */
 public class Tube extends Geometry{
+
+    /**
+     * The radius of tube
+     */
     final double radius;
+
+    /**
+     * The radius of ray
+     */
     final Ray axisRay;
 
+    /**
+     * Constructor with parameters
+     * @param rd radius
+     * @param r Ray
+     */
     public Tube(double rd, Ray r){
         radius=rd;
         axisRay = new Ray(r.getP0(),r.getDir());
@@ -29,11 +45,6 @@ public class Tube extends Geometry{
         return norm;
 
     }
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray,double maxDistance) {

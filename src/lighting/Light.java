@@ -2,10 +2,20 @@ package lighting;
 
 import primitives.Color;
 
+/**
+ * General class for displaying a light source, contains the color of the lighting.
+ */
 abstract class Light {
 
+    /**
+     * light intensity as color
+     */
+    private Color intensity;
 
-    private Color intensity;//light intensity as color
+    /**
+     * Constructor with parameters
+     * @param c Color
+     */
     protected Light(Color c)
     {
         intensity=c;

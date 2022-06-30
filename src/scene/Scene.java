@@ -20,7 +20,6 @@ public class Scene {
     /***
      * @return the name of the scene
      */
-
     public String getName() {
         return name;
     }
@@ -28,7 +27,6 @@ public class Scene {
     /***
      * @return the background color at the scene
      */
-
     public Color getBackGround() {
         return background;
     }
@@ -36,7 +34,6 @@ public class Scene {
     /***
      * @return the ambient light in the scene
      */
-
     public AmbientLight getAmbientLight() {
         return ambientLight;
     }
@@ -55,8 +52,6 @@ public class Scene {
         return lights;
     }
 
-
-
     /***
      * constructor in builder pattern
      * @param builder- object builder with same params as the scene's params
@@ -69,6 +64,9 @@ public class Scene {
         lights = builder.lights;
     }
 
+    /**
+     * builder pattern that help to build the scene.
+     */
     public static class SceneBuilder {
 
         private final String name;

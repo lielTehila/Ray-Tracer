@@ -7,14 +7,14 @@ import lighting.LightSource;
 import primitives.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
-
 import java.util.List;
-
-
 import static primitives.Double3.ZERO;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
+/**
+ *The class is used for calculations related to rays.
+ */
 public class RayTracerBasic extends RayTracer{
 
     private static final int MAX_CALC_COLOR_LEVEL = 10;
@@ -23,17 +23,6 @@ public class RayTracerBasic extends RayTracer{
 
     public RayTracerBasic(Scene scene) {
         super(scene);
-    }
-
-    /***
-     * return the color of the point that the ray arrive to
-     * @param ray the ray that we send
-     * @return the color of the point
-     */
-    @Override
-    public Color traceRay(Ray ray) {
-        GeoPoint closetPoint = findClosestIntersection(ray);
-        return calcColor(closetPoint,ray);
     }
 
     /***
@@ -58,7 +47,14 @@ public class RayTracerBasic extends RayTracer{
         return color.add(calcGlobalEffects(gp, ray, level, k));
     }
 
-
+    /**
+     *The function calculates the global effects in the specific pixel.
+     * @param gp The point we want to calculate the effect.
+     * @param inRay The ray of the point
+     * @param level Maximum recursion depth.
+     * @param k Scalar coefficient.
+     * @return
+     */
     private Color calcGlobalEffects(GeoPoint gp, Ray inRay, int level, Double3 k)
     {
         Vector v=inRay.getDir();
@@ -84,18 +80,24 @@ public class RayTracerBasic extends RayTracer{
 
         return color;
     }
-    private Ray constructRefractedRay(Point pointGeo, Ray inRay, Vector n) {
-        return new Ray(pointGeo, inRay.getDir(), n);
+
+    /**
+     *construct refracted ray
+     * @param pointGeo The point we want to calculate the effect.
+     * @param v vector normal
+     * @param n vector normal.
+     * @return refracted ray
+     */
+    private Ray constructRefractedRay(Point pointGeo, Vector v, Vector n) {
+        return new Ray(pointGeo,v,n);
     }
-    //חישוב קרניים רקורסיבי
-    private Color secondaryRayColor(int level, Double3 scalefactor, Double3 kkrt, Ray ray) {
-        GeoPoint gp = findClosestIntersection(ray);
-        Color color = scene.getBackGround();
-        if (gp != null) {
-            color = calcColor(gp, ray, level-1, kkrt).scale(scalefactor);
-        }
-        return color;
-    }
+    /**
+     *A function that calculates the effect of  the reflected rays.
+     * @param pointGeo The point we want to calculate the effect.
+     * @param v vector normal
+     * @param n vector normal.
+     * @return reflected ray.
+     */
     private Ray constructReflectedRay(Point pointGeo, Vector v, Vector n) {
         //r = v - 2.(v.n).n
         double vn = v.dotProduct(n);
@@ -107,10 +109,32 @@ public class RayTracerBasic extends RayTracer{
         Vector r = v.subtract(n.scale(2 * vn));
         return new Ray(pointGeo, r, n);
     }
-    private Ray constructRefractedRay(Point pointGeo, Vector v, Vector n) {
-        return new Ray(pointGeo,v,n);
+
+    /**
+     *A function that calculates the secondary rays.
+     * @param level Maximum recursion depth.
+     * @param scalefactor factor
+     * @param kkrt scalar
+     * @param ray the ray that from which the secondary rays branch off.
+     * @return
+     */
+    private Color secondaryRayColor(int level, Double3 scalefactor, Double3 kkrt, Ray ray) {
+        GeoPoint gp = findClosestIntersection(ray);
+        Color color = scene.getBackGround();
+        if (gp != null) {
+            color = calcColor(gp, ray, level-1, kkrt).scale(scalefactor);
+        }
+        return color;
     }
 
+    /**
+     * The function calculate the local effects
+     * the color effect from the diffusive, specular, emission and shaded.
+     * @param gp The point we want to calculate the effect.
+     * @param ray
+     * @param k
+     * @return
+     */
     private Color calcLocalEffects(GeoPoint gp, Ray ray,Double3 k) {
         Vector v=ray.getDir();
         Point point =gp.point;
@@ -125,10 +149,8 @@ public class RayTracerBasic extends RayTracer{
             Vector l = lightSource.getL(point);
             double nl = alignZero(n.dotProduct(l));
             if (nl * nv > 0) {
-//                private Double3 transparencyBeam( GeoPoint geoPoint , LightSource lightSource, Vector n) //למחוק?
-                //private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n)//למחוק?
-                //Double3 ktr = transparencyBeam(gp, lightSource, l);// soft shadow   //בלי שיפור זמן ריצה מתאים לתרגיל 8
-                Double3 ktr = transparency(gp, lightSource, l, n);//בלי שיפור soft shadow
+                Double3 ktr = transparencyBeam(gp, lightSource, l);// with soft shadow
+                //Double3 ktr = transparency(gp, lightSource, l, n);// without soft shadow
                 if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
                     //if(unshaded(lightSource,l,n,gp)) {
                     //Color iL = lightSource.getIntensity(point);
@@ -143,12 +165,12 @@ public class RayTracerBasic extends RayTracer{
     }
 
     /**
-     *
-     * @param geoPoint point of geometry
-     * @param lightSource the light object
-     * @param l vector of the direction of the light
-     * @param n normal to the geo point
-     * @return the level of the transparency
+     * Calculates the shadow.
+     * @param geoPoint point of geometry.
+     * @param lightSource the light object.
+     * @param l vector of the direction of the light.
+     * @param n normal to the geo point.
+     * @return the level of the transparency.
      */
     private Double3 transparency(GeoPoint geoPoint, LightSource lightSource, Vector l, Vector n){
 
@@ -183,8 +205,6 @@ public class RayTracerBasic extends RayTracer{
         List<Vector> beamL = lightSource.getListRound(geoPoint.point, 10, 10);
         Double3 tempKtr = Double3.ZERO;
         for (Vector vl : beamL) {
-//            Point vecToPnt= new Point(vl.get_x(), vl.get_y(), vl.get_z());
-//            double lightDistance = geoPoint.point.distance(vecToPnt);
             tempKtr = tempKtr.add( transparency(geoPoint,lightSource, vl, n));
         }
         ktr = tempKtr.reduce( beamL.size());
@@ -271,9 +291,10 @@ public class RayTracerBasic extends RayTracer{
         return ray.findClosestGeoPoint(intersections);
     }
 
-
-
-
-
+    @Override
+    public Color traceRay(Ray ray) {
+        GeoPoint closetPoint = findClosestIntersection(ray);
+        return calcColor(closetPoint,ray);
+    }
 
 }

@@ -9,16 +9,23 @@ import scene.Scene;
  */
 public abstract class RayTracer {
 
+    /**
+     * the scene of the picture.
+     */
     protected Scene scene;
 
+    /**
+     * constructor with params.
+     * @param scene return this.
+     */
     public RayTracer(Scene scene) {
         this.scene = scene;
     }
 
-    /**
-     * the fanction get a ray and reyurn the color of the ray attach
-     * @param ray
-     * @return
+    /***
+     * return the color of the point that the ray arrive to
+     * @param ray the ray that we send
+     * @return the color of the point
      */
     abstract public Color traceRay(Ray ray);
 

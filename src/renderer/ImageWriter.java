@@ -19,11 +19,18 @@ import javax.imageio.*;
  * @author Dan
  */
 public class ImageWriter {
+    /**
+     * Number of pixels in a row.
+     */
     private int nX;
+    /**
+     *Number of pixels in a column.
+     */
     private int nY;
-
+    /**
+     *FOLDER PATH
+     */
     private static final String FOLDER_PATH = System.getProperty("user.dir") + "/images";
-
     private BufferedImage image;
     private String imageName;
 

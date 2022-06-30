@@ -1,23 +1,22 @@
 package primitives;
 
+/**
+ *The department represents a Vector.
+ */
 public class Vector extends Point {
 
+    /**
+     * Constructor with parameters.
+     * @param x value.
+     * @param y value.
+     * @param z value.
+     */
     public Vector(double x, double y, double z) {
-//        super(x,y,z);
-//        if(_xyz.equals(Double3.ZERO)){
-//            throw new IllegalArgumentException("Vector(0,0,0) is not allowed");
-//        }
         this(new Double3(x, y, z));
-    }
-
-    @Override
-    public Double3 get_xyz() {
-        return super.get_xyz();
     }
 
     /**
      * primary  constructor for Vector class
-     *
      * @param xyz head of vector starting from origin Point(0.0.0)
      */
     public Vector(Double3 xyz) {
@@ -39,7 +38,7 @@ public class Vector extends Point {
     }
 
     /**
-     * @return
+     * @return The length is squared.
      */
     public double lengthSquared() {
         return _xyz.d1 * _xyz.d1
@@ -48,12 +47,17 @@ public class Vector extends Point {
     }
 
     /**
-     * @return
+     * @return The length.
      */
     public double length() {
         return Math.sqrt(lengthSquared());
     }
 
+    /**
+     * The function calculates a scleral fold.
+     * @param rhs scleral
+     * @return The  calculates a scleral fold.
+     */
     public Vector scale(double rhs)
     {
         return new Vector(this.get_xyz().scale(rhs));
@@ -94,8 +98,17 @@ public class Vector extends Point {
         return new Vector(cx, cy, cz);
     }
 
+    /**
+     * The function normalizes the vector.
+     * @return
+     */
     public Vector normalize() {
         double len = length();
         return new Vector(_xyz.reduce(len));
+    }
+
+    @Override
+    public Double3 get_xyz() {
+        return super.get_xyz();
     }
 }

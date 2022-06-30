@@ -9,62 +9,66 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
+/**
+ * The class represents a plane.
+ */
 public class Plane extends Geometry implements FlatGeometry{
+    /**
+     * The point of the plain.
+     */
     final Point q0;
+    /**
+     *Vector direction of the plane - must be normalized.
+     */
     final Vector normal;
 
     /**
-     * TODO explanations here
-     * @param _q0
-     * @param _normal vector for the normal (will bwe normalized automatically)
+     * The constructor of the plane gets a vector point and starts the point and vector of the plane.
+     * @param _q0 The point of the plain.
+     * @param _normal vector for the normal (will bwe normalized automatically).
      */public Plane(Point _q0, Vector _normal) {
         q0 = _q0;
         normal = _normal.normalize();
     }
 
+    /**
+     * A constructor who gets three points and builds a plane from them.
+     * @param p1 The point of the plain.
+     * @param p2 The point for the vector.
+     * @param p3 The point for the vector.
+     */
     public Plane(Point p1, Point p2, Point p3) {
+
         q0 =p1;
-//        //TODO check direction of vectors
-//        Vector U = p1.subtract(p2);
-//        Vector V = p3.subtract(p2);
 
         Vector U = p2.subtract(p1);
         Vector V = p3.subtract(p1);
 
         Vector N = U.crossProduct(V);
 
-        //right hand rule
         normal = N.normalize();;
     }
 
+    /**
+     * @return The point of the plain.
+     */
     public Point getQ0() {
         return q0;
     }
 
     /***
-     * implementation of getNormal from Geometry
-     * @return the normal vector of the plane
+     * implementation of getNormal from Geometry.
+     * @return the normal vector of the plane.
      */
 
     public Vector getNormal() {
         return normal;
     }
 
-    /***
-     * implementation of getNormal
-     * @param point point outside the grophic shape
-     * @return normal of the plane in the point
-     */
     @Override
     public Vector getNormal(Point point) {
         return getNormal();
     }
-
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {

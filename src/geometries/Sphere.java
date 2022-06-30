@@ -8,9 +8,20 @@ import java.util.*;
 import static primitives.Util.alignZero;
 
 public class Sphere extends Geometry{
+    /**
+     * The center point of the circle
+     */
     final Point center;
+    /**
+     *The radius of the circle
+     */
     final double radius;
 
+    /**
+     * Constructor with params
+     * @param p the point in the middle of the sphere.
+     * @param r The radius of the sphere.
+     */
     public Sphere(Point p, double r){
         center =new Point(p.get_xyz());
         radius= r;
@@ -22,11 +33,6 @@ public class Sphere extends Geometry{
         Vector norm = new Vector(pn.get_xyz());
         return norm.normalize();
     }
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {

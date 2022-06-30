@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The class represents a collection of geometric shapes reserved in the list.
+ */
 public class Geometries extends Intersectable {
     /**
      * return list of shapes
@@ -14,21 +17,25 @@ public class Geometries extends Intersectable {
     private List<Intersectable> shapes = null;
 
     /**
-     * b
+     * The constructor initializes the list of shapes to an empty list
      */
     public Geometries() {
         shapes = new LinkedList<>();
     }
 
     /**
-     *
-     * @param geometries
+     * The constructor initializes the list in the list of forms he received
+     * @param geometries The shapes
      */
     public Geometries(Intersectable... geometries) {
         this();
         add(geometries);
     }
 
+    /**
+     * Adds new shapes to our list
+     * @param geometries The new shapes
+     */
     public void add(Intersectable... geometries) {
         if (shapes == null) {
             throw new IllegalStateException("list not created");

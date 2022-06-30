@@ -11,16 +11,20 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
+/**
+ *The class represents a triangle by inheritance from a polygon.
+ */
 public class Triangle extends Polygon {
+
+    /**
+     *Constructor with parameters
+     * @param p1 First point
+     * @param p2 Second point
+     * @param p3 Third point
+     */
     public Triangle(Point p1, Point p2, Point p3) {
         super(p1, p2, p3);
     }
-
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {

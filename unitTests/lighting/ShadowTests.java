@@ -50,7 +50,7 @@ public class ShadowTests {
 		// 1 בלי שיפור ריתה 3 עם
 		//5  שיפור ריצת פיקסל
 		//2 שיפור פיקסל+צללים בלי זמן ריצה לתרגיל 8
-		sphereTriangleHelper("shadowSphereTriangleInitial7", //
+		sphereTriangleHelper("shadowSphereTriangleInitial9", //
 				new Triangle(new Point(-70, -40, 0), new Point(-40, -70, 0), new Point(-68, -68, -4)), //
 				new Point(-100, -100, 200));
 	}
@@ -60,7 +60,7 @@ public class ShadowTests {
 	 */
 	@Test
 	public void sphereTriangleMove1() {
-		sphereTriangleHelper("shadowSphereTriangleMove2", //
+		sphereTriangleHelper("shadowSphereTriangleMove3", //
 				new Triangle(new Point(-62, -32, 0), new Point(-32, -62, 0), new Point(-60, -60, -4)), //
 				new Point(-100, -100, 200));
 	}

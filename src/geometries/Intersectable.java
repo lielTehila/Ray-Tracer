@@ -8,9 +8,10 @@ import java.util.Objects;
 
 /***
  * common interface for all graphic objects
- * that this intersect with a ray {@link primitives.Ray}
+ * that this intersects with a ray {@link primitives.Ray}
  */
 abstract public class Intersectable {
+
     /***
      * find all intersections points {@link Point} that intersect with
      * a specific Ray {@link Ray}
@@ -25,26 +26,48 @@ abstract public class Intersectable {
                 .toList();
     }
 
-    /***
-     * ????
-     * @param ray
-     * @return
+    /**
+     * The function finds intersections between the ray and the geometric at a defined distance.
+     * The function is a general function that calls an abstract function To enable finding intersection points with different geometric.
+     * @param ray The ray we want to find points of intersection with the geometric.
+     * @param maxDistance The maximum distance at which we are looking for intersection points.
+     * @return List of intersection point between the ray and the geometric.
      */
     public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
         return findGeoIntersectionsHelper(ray, maxDistance);
     }
+
+    /**
+     * The function finds intersections between the ray and the geometric with a distance of default value.
+     * The function is a general function that calls an abstract function To enable finding intersection points with different geometric.
+     * @param ray The ray we want to find points of intersection with the geometric.
+     * @return List of intersection point between the ray and the geometric.
+     */
     public final List<GeoPoint> findGeoIntersections(Ray ray) {
         return findGeoIntersectionsHelper(ray, Double.POSITIVE_INFINITY);
     }
 
+    /**
+     * The function finds intersections between the ray and the geometric at a defined distance.
+     * An abstract function and each of the geometric bodies is exactly the same in a way that fits the same body.
+     * @param ray The ray we want to find points of intersection with the geometric.
+     * @param maxDistance The maximum distance at which we are looking for intersection points.
+     * @return List of intersection point between the ray and the geometric.
+     */
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
 
     /**
-     *?????
+     * A class representing a point on a geometric.
      */
-    public static class GeoPoint{
+    public static class GeoPoint {
 
+        /**
+         * the geometric
+         */
         public final Geometry geometry;
+        /**
+         * the point on geometric.
+         */
         public final Point point;
 
         /***
@@ -73,10 +96,6 @@ abstract public class Intersectable {
             return geometry.equals(geoPoint.geometry) && point.equals(geoPoint.point);
         }
 
-//        @Override
-//        public int hashCode() {
-//            return Objects.hash(geometry, point);
-//        }
     }
 
 }

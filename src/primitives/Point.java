@@ -2,13 +2,21 @@ package primitives;
 
 import java.util.Objects;
 
+/**
+ * The class represents an image in space.
+ */
 public class Point{
-
-    public static final Point ZERO = new Point(0,0,0);  //origin of the axis
+    /**
+     * origin of the axis.
+     */
+    public static final Point ZERO = new Point(0,0,0);
+    /**
+     * x y z values.
+     */
     final Double3 _xyz;
 
     /***
-     * implement get point
+     * implement get point.
      * @return point
      */
     public Double3 get_xyz() {
@@ -56,6 +64,51 @@ public class Point{
         _xyz = new Double3(x,y,z);
     }
 
+    /**
+     *The function calculates the square of the distance.
+     * @param other another point for the distance.
+     * @return  d = ((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1))
+     */
+    public double distanceSquared(Point other){
+        double x1 = _xyz.d1;
+        double y1 = _xyz.d2;
+        double z1 = _xyz.d3;
+
+        double x2 = other._xyz.d1;
+        double y2 = other._xyz.d2;
+        double z2 = other._xyz.d3;
+
+        return ((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1));
+    }
+
+    /**
+     *The function calculates the distance between two points.
+     * @param other another point
+     * @return d = Sqrt (lengthSquare)
+     * @link https://www.engineeringtoolbox.com/distance-relationship-between-two-points-d_1854.html
+     */
+    public  double distance (Point other){
+        return Math.sqrt(distanceSquared(other));
+    }
+
+    /**
+     *The function makes a connection between a point and a vector.
+     * @param vector vector to add.
+     * @return
+     */
+    public Point add(Vector vector) {
+        return  new Point(_xyz.add(vector._xyz));
+    }
+
+    /**
+     * The function is sub between this and another point.
+     * @param point another point
+     * @return vector of the sub.
+     */
+    public Vector subtract(Point point) {
+        return new Vector(_xyz.subtract(point._xyz));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,46 +125,5 @@ public class Point{
     @Override
     public String toString() {
         return "Point " + _xyz ;
-    }
-
-    /**
-     *
-     * @param other
-     * @return  d = ((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1))
-     */
-    public double distanceSquared(Point other){
-        double x1 = _xyz.d1;
-        double y1 = _xyz.d2;
-        double z1 = _xyz.d3;
-
-        double x2 = other._xyz.d1;
-        double y2 = other._xyz.d2;
-        double z2 = other._xyz.d3;
-
-        return ((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1));
-    }
-
-    /**
-     *
-     * @param other
-     * @return d = Sqrt (lengthSquare)
-     * @link https://www.engineeringtoolbox.com/distance-relationship-between-two-points-d_1854.html
-     */
-    public  double distance (Point other){
-        return Math.sqrt(distanceSquared(other));
-    }
-
-    /**
-     *
-     * @param vector
-     * @return
-     */
-    public Point add(Vector vector) {
-        return  new Point(_xyz.add(vector._xyz));
-    }
-
-
-    public Vector subtract(Point point) {
-        return new Vector(_xyz.subtract(point._xyz));
     }
 }
