@@ -203,6 +203,10 @@ public class Camera {
         this.rayTracer = rayTracer;
         return this;
     }
+    public Camera renderImage(boolean isThired)
+    {
+
+    }
 
     /**
      * build the image with printing the geometries and the background
