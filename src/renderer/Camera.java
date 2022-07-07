@@ -21,15 +21,21 @@ public class Camera {
     private double height;
     private ImageWriter imageWriter;
     private RayTracer rayTracer;
+    static public boolean withTheads = true;
+    static public boolean antialiasing = true;
+    static public boolean softShadows = true;
+    static public boolean adaptiveSuperSampling = true;
+
+
     /**
      * Height of the grid for picture improvements
      */
-    private int _N=8;
+    private int _N = 8;
 
     /**
      * Width of the grid for picture improvements
      */
-    private int _M=8;
+    private int _M = 8;
 
     /**
      * random variable used for stochastic ray creation
@@ -203,21 +209,48 @@ public class Camera {
         this.rayTracer = rayTracer;
         return this;
     }
-    public Camera renderImage(boolean isThired)
-    {
 
+    /**
+     * render image with params
+     *
+     * @param _withTheads            determine if the render func will act with threads
+     * @param _antialiasing          determine if the render picture will have an improvment of antialiasing
+     * @param _softShadows           determine if the render picture will have an improvment of softShadows
+     * @param _adaptiveSuperSampling determine if the render func will act with improve run time of adaptiveSuperSampling
+     * @return this
+     */
+    public Camera renderImage(boolean _withTheads, boolean _antialiasing, boolean _softShadows, boolean _adaptiveSuperSampling) {
+        //set the demands in the global variables
+        withTheads = _withTheads;
+        antialiasing = _antialiasing;
+        softShadows = _softShadows;
+        adaptiveSuperSampling = _adaptiveSuperSampling;
+
+        if (!withTheads)
+            renderImageSimple();
+        renderImage();
+
+        return this;
     }
 
     /**
      * build the image with printing the geometries and the background
+     * render with threads
      */
     public Camera renderImage() {
+
         int Nx = imageWriter.getNx();
         int Ny = imageWriter.getNy();
         Pixel.initialize(Ny, Nx, printInterval);
         IntStream.range(0, Ny).parallel().forEach(i -> {
             IntStream.range(0, Nx).parallel().forEach(j -> {
-                castRay(Nx, Ny, j, i);
+                if (!antialiasing) {  //build picture without antialiasing improve
+                    castRaySimple(Nx, Ny, i, j);
+                } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
+                    castRayImprovedAntialising(Nx, Ny, i, j);
+                } else { //  //build picture with antialiasing improve
+                    castRayRegularAntialiasing(Nx, Ny, i, j);
+                }
                 Pixel.pixelDone();
                 Pixel.printPixel();
             });
@@ -225,24 +258,33 @@ public class Camera {
 
 
         imageWriter.writeToImage();
-        //renderImageWithAntialiasing();//2 שיפורים עם שיפור זמן ריצה
+        renderImageWithAntialiasing();//2 שיפורים עם שיפור זמן ריצה
         return this;
     }
-    //רגיל בלי שינויים
-//    public Camera renderImage() {
-//        int Nx = imageWriter.getNx();
-//        int Ny = imageWriter.getNy();
-//        for (int i = 0; i < Ny; i++) {
-//            for (int j = 0; j < Nx; j++) {
-//                 castRay(Nx, Ny, i, j);
-//            }
-//        }
-//
-//        imageWriter.writeToImage();
-//        //renderImageWithAntialiasing();//2 שיפורים עם שיפור זמן ריצה
-//        return this;
-//    }
 
+    /**
+     * render without run-time improvements
+     *
+     * @return this
+     */
+    public Camera renderImageSimple() {
+        int Nx = imageWriter.getNx();
+        int Ny = imageWriter.getNy();
+        for (int i = 0; i < Ny; i++) {
+            for (int j = 0; j < Nx; j++) {
+                if (!antialiasing) {  //build picture without antialiasing improve
+                    castRaySimple(Nx, Ny, i, j);
+                } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
+                    castRayImprovedAntialising(Nx, Ny, i, j);
+                } else { //  //build picture with antialiasing improve
+                    castRayRegularAntialiasing(Nx, Ny, i, j);
+                }
+
+            }
+        }
+        imageWriter.writeToImage();
+        return this;
+    }
 
 
     /***
@@ -253,64 +295,67 @@ public class Camera {
      * @param j-The number of pixels to move in a row
      */
     //שיפור  anti aliasing// בלי שיפור זמן ריצה מתאים לתרגיל 8
-//    private void castRay(int Nx, int Ny, int i, int j) {
-//        //improving of anti-aliasing
-//        int bigNy = 9*Ny;
-//        int bigNx = 9*Nx;
-//        Color pixelColor=new Color(java.awt.Color.BLACK);
-//        for (int iColumn = i*9; iColumn < i*9+9; iColumn++) {
-//            for (int jRow = j*9; jRow < j*9+9; jRow++) {
-//
-//                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
-//                pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
-//            }
-//        }
-//        pixelColor=pixelColor.reduce(81);
-//        imageWriter.writePixel(j, i, pixelColor);
-//    }
-    //   שיפור ריצה של הזמן
-//    private void castRay(int Nx, int Ny, int i, int j) {
-//        //improving of anti-aliasing
-//        int bigNy = 2*Ny;
-//        int bigNx = 2*Nx;
-//        Ray middleRay = constructRay(Nx, Ny, j, i);
-//        Color pixelColor=new Color(java.awt.Color.BLACK);
-//        pixelColor =pixelColor.add(rayTracer.traceRay(middleRay)) ;
-//        java.awt.Color c1=rayTracer.traceRay(middleRay).getColor();
-//        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
-//            for (int jRow = j*2; jRow < j*2+2; jRow++) {
-//                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
-//                java.awt.Color c2=rayTracer.traceRay(ray).getColor();
-//                if(Math.abs(c1.getBlue()-c2.getBlue())>5&&Math.abs(c1.getGreen()-c2.getGreen())>5&&Math.abs(c1.getRed()-c2.getRed())>5)
-//                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow,rayTracer.traceRay(ray)));
-//                else
-//                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
-//            }
-//        }
-//        pixelColor=pixelColor.reduce(5);
-//        imageWriter.writePixel(j, i, pixelColor);
-//    }
-    private Color castRayHelp(int Nx, int Ny, int i, int j,Color pixelColor) {
-        int bigNy = 2*Ny;
-        int bigNx = 2*Nx;
-        Ray middleRay = constructRay(Nx, Ny, j, i);
-        Point m=new Point(rayTracer.traceRay(middleRay).getColor().getBlue(),rayTracer.traceRay(middleRay).getColor().getGreen(),rayTracer.traceRay(middleRay).getColor().getRed());
-        for (int iColumn = i*2; iColumn < i*2+2; iColumn++) {
-            for (int jRow = j*2; jRow < j*2+2; jRow++) {
+    private void castRayRegularAntialiasing(int Nx, int Ny, int i, int j) {
+        //improving of anti-aliasing
+        int bigNy = 9 * Ny;
+        int bigNx = 9 * Nx;
+        Color pixelColor = new Color(java.awt.Color.BLACK);
+        for (int iColumn = i * 9; iColumn < i * 9 + 9; iColumn++) {
+            for (int jRow = j * 9; jRow < j * 9 + 9; jRow++) {
+
                 Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
-                Point r=new Point(rayTracer.traceRay(ray).getColor().getBlue(),rayTracer.traceRay(ray).getColor().getGreen(),rayTracer.traceRay(ray).getColor().getRed());
-                if(m.distance(r)>10)
-                    pixelColor =pixelColor.add(castRayHelp( Nx, Ny, iColumn, jRow,rayTracer.traceRay(ray))) ;
-                else
-                    pixelColor =pixelColor.add(rayTracer.traceRay(ray)) ;
+                pixelColor = pixelColor.add(rayTracer.traceRay(ray));
             }
         }
-        pixelColor=pixelColor.reduce(5);
+        pixelColor = pixelColor.reduce(81);
+        imageWriter.writePixel(j, i, pixelColor);
+    }
+
+    //   שיפור ריצה של הזמן
+    //לא עובד טוב. צריך לבדוק למה
+    private void castRayImprovedAntialising(int Nx, int Ny, int i, int j) {
+        //improving of anti-aliasing
+        int bigNy = 2 * Ny;
+        int bigNx = 2 * Nx;
+        Ray middleRay = constructRay(Nx, Ny, j, i);
+        Color pixelColor = new Color(java.awt.Color.BLACK);
+        pixelColor = pixelColor.add(rayTracer.traceRay(middleRay));
+        java.awt.Color c1 = rayTracer.traceRay(middleRay).getColor();
+        for (int iColumn = i * 2; iColumn < i * 2 + 2; iColumn++) {
+            for (int jRow = j * 2; jRow < j * 2 + 2; jRow++) {
+                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+                java.awt.Color c2 = rayTracer.traceRay(ray).getColor();
+                if (Math.abs(c1.getBlue() - c2.getBlue()) > 5 && Math.abs(c1.getGreen() - c2.getGreen()) > 5 && Math.abs(c1.getRed() - c2.getRed()) > 5)
+                    pixelColor = pixelColor.add(castRayHelp(Nx, Ny, iColumn, jRow, rayTracer.traceRay(ray)));
+                else
+                    pixelColor = pixelColor.add(rayTracer.traceRay(ray));
+            }
+        }
+        pixelColor = pixelColor.reduce(5);
+        imageWriter.writePixel(j, i, pixelColor);
+    }
+
+    private Color castRayHelp(int Nx, int Ny, int i, int j, Color pixelColor) {
+        int bigNy = 2 * Ny;
+        int bigNx = 2 * Nx;
+        Ray middleRay = constructRay(Nx, Ny, j, i);
+        Point m = new Point(rayTracer.traceRay(middleRay).getColor().getBlue(), rayTracer.traceRay(middleRay).getColor().getGreen(), rayTracer.traceRay(middleRay).getColor().getRed());
+        for (int iColumn = i * 2; iColumn < i * 2 + 2; iColumn++) {
+            for (int jRow = j * 2; jRow < j * 2 + 2; jRow++) {
+                Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
+                Point r = new Point(rayTracer.traceRay(ray).getColor().getBlue(), rayTracer.traceRay(ray).getColor().getGreen(), rayTracer.traceRay(ray).getColor().getRed());
+                if (m.distance(r) > 10)
+                    pixelColor = pixelColor.add(castRayHelp(Nx, Ny, iColumn, jRow, rayTracer.traceRay(ray)));
+                else
+                    pixelColor = pixelColor.add(rayTracer.traceRay(ray));
+            }
+        }
+        pixelColor = pixelColor.reduce(5);
         return pixelColor;
     }
 
     //בלי שיפורים של תצוגה וריצה
-    private void castRay(int Nx, int Ny, int i, int j) {
+    private void castRaySimple(int Nx, int Ny, int i, int j) {
         Ray ray = constructRay(Nx, Ny, j, i);
         Color pixelColor = rayTracer.traceRay(ray);
         imageWriter.writePixel(j, i, pixelColor);
@@ -318,7 +363,7 @@ public class Camera {
 
     public Camera writeToImage() {
         imageWriter.writeToImage();
-        return  this;
+        return this;
     }
 
     public void printGrid(int interval, Color color) {
@@ -332,9 +377,10 @@ public class Camera {
 
     /**
      * Construct ray through nthe center of a pixel when we have only the bottom right corner's ray
+     *
      * @param ray the ray
-     * @param nX number of pixel in width
-     * @param nY number of pixels in height
+     * @param nX  number of pixel in width
+     * @param nY  number of pixels in height
      * @return center's ray
      */
     public Ray constructPixelCenterRay(Ray ray, double nX, double nY) {
@@ -354,6 +400,7 @@ public class Camera {
      * Function to find a specific point on the plane
      * we need to calculate the distance from the point on the camera to the plane
      * for that we use the cos of the angle of the direction ray with vTo vector
+     *
      * @param r ray to the specific point
      * @return the distance to the point
      */
@@ -366,9 +413,10 @@ public class Camera {
     /**
      * Function that gets a pixel's center ray and constructs a list of 5 rays from that ray,
      * one at each corner of the pixel and one in the center
+     *
      * @param myRay the center's ray
-     * @param nX number of pixel in width
-     * @param nY number of pixels in height
+     * @param nX    number of pixel in width
+     * @param nY    number of pixels in height
      * @return list of rays
      */
     public List<Ray> construct5RaysFromRay(Ray myRay, double nX, double nY) {
@@ -384,15 +432,15 @@ public class Camera {
         Point center = getPointOnViewPlane(myRay);
 
         //[-1/2, -1/2]
-        myRays.add( new Ray(place, center.add(vRight.scale(-rX / 2)).add(vUp.scale(rY / 2)).subtract(place)));
+        myRays.add(new Ray(place, center.add(vRight.scale(-rX / 2)).add(vUp.scale(rY / 2)).subtract(place)));
         //[1/2, -1/2]
-        myRays.add( new Ray(place, center.add(vRight.scale(rX / 2)).add(vUp.scale(rY / 2)).subtract(place)));
+        myRays.add(new Ray(place, center.add(vRight.scale(rX / 2)).add(vUp.scale(rY / 2)).subtract(place)));
 
         myRays.add(myRay);
         //[-1/2, 1/2]
-        myRays.add( new Ray(place, center.add(vRight.scale(-rX / 2)).add(vUp.scale(-rY / 2)).subtract(place)));
+        myRays.add(new Ray(place, center.add(vRight.scale(-rX / 2)).add(vUp.scale(-rY / 2)).subtract(place)));
         //[1/2, 1/2]
-        myRays.add( new Ray(place, center.add(vRight.scale(rX / 2)).add(vUp.scale(-rY / 2)).subtract(place)));
+        myRays.add(new Ray(place, center.add(vRight.scale(rX / 2)).add(vUp.scale(-rY / 2)).subtract(place)));
         return myRays;
     }
 
@@ -402,9 +450,10 @@ public class Camera {
      * one on the left of the center
      * one on the right of the center
      * one on the bottom of the center
+     *
      * @param ray the center's ray
-     * @param nX number of pixel in width
-     * @param nY number of pixels in height
+     * @param nX  number of pixel in width
+     * @param nY  number of pixels in height
      * @return list of rays
      */
     public List<Ray> construct4RaysThroughPixel(Ray ray, double nX, double nY) {
@@ -428,7 +477,6 @@ public class Camera {
         myRays.add(new Ray(place, point4.subtract(place)));
         return myRays;
     }
-
 
 
     public Ray constructRayThroughPixel(int nX, int nY, double j, double i) {
@@ -460,6 +508,7 @@ public class Camera {
         return new Ray(place, vIJ);
 
     }
+
     /**
      * This function get a ray launched in the center of a pixel and launch a beam n * m others rays
      * on the same pixel
@@ -489,6 +538,7 @@ public class Camera {
 
         return myRays;
     }
+
     /**
      * The function constructs a ray from Camera location through a point (i,j) on the grid of a
      * pixel in the view plane
@@ -531,6 +581,7 @@ public class Camera {
         return new Ray(place, vIJ);
 
     }
+
     //פונקציה ראשית
     private void renderImageWithAntialiasing() {
         if (_N == 0 || _M == 0)
