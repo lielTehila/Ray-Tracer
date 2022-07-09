@@ -25,6 +25,7 @@ public class Camera {
     static public boolean antialiasing = true;
     static public boolean softShadows = true;
     static public boolean adaptiveSuperSampling = true;
+    public int threadsCount=3;
 
 
     /**
@@ -237,30 +238,53 @@ public class Camera {
      * build the image with printing the geometries and the background
      * render with threads
      */
+    //שיתה שניה לא עובדת טוב יותר
     public Camera renderImage() {
 
         int Nx = imageWriter.getNx();
         int Ny = imageWriter.getNy();
         Pixel.initialize(Ny, Nx, printInterval);
-        IntStream.range(0, Ny).parallel().forEach(i -> {
-            IntStream.range(0, Nx).parallel().forEach(j -> {
-                if (!antialiasing) {  //build picture without antialiasing improve
-                    castRaySimple(Nx, Ny, i, j);
-                } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
-                    castRayImprovedAntialising(Nx, Ny, i, j);
-                } else { //  //build picture with antialiasing improve
-                    castRayRegularAntialiasing(Nx, Ny, i, j);
+        while (threadsCount-- > 0) {
+            new Thread(() -> {
+                for (Pixel pixel = new Pixel(); pixel.nextPixel(); Pixel.pixelDone())
+                {
+                    if (!antialiasing) {  //build picture without antialiasing improve
+                        castRaySimple(Nx, Ny, pixel.col, pixel.row);
+                    } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
+                        castRayImprovedAntialising(Nx, Ny, pixel.col, pixel.row);
+                    } else { //  //build picture with antialiasing improve
+                        castRayRegularAntialiasing(Nx, Ny, pixel.col, pixel.row);
+                    }
+                    Pixel.pixelDone();
+                    Pixel.printPixel();
                 }
-                Pixel.pixelDone();
-                Pixel.printPixel();
-            });
-        });
-
-
+            }).start();
+        }
+        Pixel.waitToFinish();
         imageWriter.writeToImage();
-        renderImageWithAntialiasing();//2 שיפורים עם שיפור זמן ריצה
         return this;
     }
+//    public Camera renderImage() {
+//
+//        int Nx = imageWriter.getNx();
+//        int Ny = imageWriter.getNy();
+//        Pixel.initialize(Ny, Nx, printInterval);
+//        IntStream.range(0, Ny).parallel().forEach(i -> {
+//            IntStream.range(0, Nx).parallel().forEach(j -> {
+//                if (!antialiasing) {  //build picture without antialiasing improve
+//                    castRaySimple(Nx, Ny, i, j);
+//                } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
+//                    castRayImprovedAntialising(Nx, Ny, i, j);
+//                } else { //  //build picture with antialiasing improve
+//                    castRayRegularAntialiasing(Nx, Ny, i, j);
+//                }
+//                Pixel.pixelDone();
+//                Pixel.printPixel();
+//            });
+//        });
+//        imageWriter.writeToImage();
+//        return this;
+//    }
 
     /**
      * render without run-time improvements
