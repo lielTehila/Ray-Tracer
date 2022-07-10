@@ -25,7 +25,6 @@ public class Camera {
     static public boolean antialiasing = true;
     static public boolean softShadows = true;
     static public boolean adaptiveSuperSampling = true;
-    public int threadsCount=3;
 
 
     /**
@@ -65,7 +64,6 @@ public class Camera {
 
     /**
      * set the size of view plane
-     *
      * @param width  width of the view plane
      * @param height height of the view plane
      * @return camera
@@ -78,7 +76,6 @@ public class Camera {
 
     /**
      * set the distance of the view plane from the camera
-     *
      * @param d double
      * @return camera
      */
@@ -89,7 +86,6 @@ public class Camera {
 
     /**
      * return the place
-     *
      * @return place
      */
     public Point getPlace() {
@@ -98,8 +94,7 @@ public class Camera {
 
     /**
      * return the v to
-     *
-     * @return
+     * @return vector to
      */
     public Vector getVTo() {
         return vTo;
@@ -107,8 +102,7 @@ public class Camera {
 
     /**
      * return the v up
-     *
-     * @return
+     * @return vector up
      */
     public Vector getVUp() {
         return vUp;
@@ -116,7 +110,6 @@ public class Camera {
 
     /**
      * return the vRight
-     *
      * @return vRight
      */
     public Vector getVRight() {
@@ -125,7 +118,6 @@ public class Camera {
 
     /**
      * return distance
-     *
      * @return distance
      */
     public double getDistance() {
@@ -148,7 +140,6 @@ public class Camera {
 
     /**
      * calaulate and return the ray from the camera to the specific pixel
-     *
      * @param nX-   Pixel size in a row
      * @param nY-   Pixel size in a column
      * @param j-The number of pixels to move in a row
@@ -192,7 +183,6 @@ public class Camera {
 
     /**
      * set ImageWriter
-     *
      * @param imageWriter get new imageWriter
      * @return this
      */
@@ -213,7 +203,6 @@ public class Camera {
 
     /**
      * render image with params
-     *
      * @param _withTheads            determine if the render func will act with threads
      * @param _antialiasing          determine if the render picture will have an improvment of antialiasing
      * @param _softShadows           determine if the render picture will have an improvment of softShadows
@@ -257,66 +246,9 @@ public class Camera {
         });
         return this;
     }
-//    /**
-//     * build the image with printing the geometries and the background
-//     * render with threads
-//      אמור להדפיס אחוזים. לא עובד ויותר איטי
-//     */
-//    public Camera renderImage() {
-//
-//        int Nx = imageWriter.getNx();
-//        int Ny = imageWriter.getNy();
-//        Pixel.initialize(Ny, Nx, printInterval);
-//        while (threadsCount-- > 0) {
-//            new Thread(() -> {
-//                for (Pixel pixel = new Pixel(); pixel.nextPixel(); Pixel.pixelDone())
-//                {
-//                    if (!antialiasing) {  //build picture without antialiasing improve
-//                        castRaySimple(Nx, Ny, pixel.col, pixel.row);
-//                        Pixel.pixelDone();
-//                        Pixel.printPixel();
-//                    } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
-//                        castRayImprovedAntialising(Nx, Ny, pixel.col, pixel.row);
-//                        Pixel.pixelDone();
-//                        Pixel.printPixel();
-//                    } else { //  //build picture with antialiasing improve
-//                        castRayRegularAntialiasing(Nx, Ny, pixel.col, pixel.row);
-//                        Pixel.pixelDone();
-//                        Pixel.printPixel();
-//                    }
-//
-//                }
-//            }).start();
-//        }
-//        Pixel.waitToFinish();
-//        imageWriter.writeToImage();
-//        return this;
-//    }
-//    public Camera renderImage() {
-//
-//        int Nx = imageWriter.getNx();
-//        int Ny = imageWriter.getNy();
-//        Pixel.initialize(Ny, Nx, printInterval);
-//        IntStream.range(0, Ny).parallel().forEach(i -> {
-//            IntStream.range(0, Nx).parallel().forEach(j -> {
-//                if (!antialiasing) {  //build picture without antialiasing improve
-//                    castRaySimple(Nx, Ny, i, j);
-//                } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
-//                    castRayImprovedAntialising(Nx, Ny, i, j);
-//                } else { //  //build picture with antialiasing improve
-//                    castRayRegularAntialiasing(Nx, Ny, i, j);
-//                }
-//                Pixel.pixelDone();
-//                Pixel.printPixel();
-//            });
-//        });
-//        imageWriter.writeToImage();
-//        return this;
-//    }
 
     /**
-     * render without run-time improvements
-     *
+     * render without threads
      * @return this
      */
     public Camera renderImageSimple() {
@@ -341,12 +273,12 @@ public class Camera {
 
     /***
      * create ray from camera to specific pixel
+     * castRay with antialiasing without its run-time improvment
      * @param Nx - Pixel size in a row
      * @param Ny -Pixel size in a column
      * @param i -The number of pixels to move in a column
      * @param j-The number of pixels to move in a row
      */
-    //שיפור  anti aliasing// בלי שיפור זמן ריצה מתאים לתרגיל 8
     private void castRayRegularAntialiasing(int Nx, int Ny, int i, int j) {
         //improving of anti-aliasing
         int bigNy = 9 * Ny;
@@ -363,8 +295,14 @@ public class Camera {
         imageWriter.writePixel(j, i, pixelColor);
     }
 
-    //   שיפור ריצה של הזמן
-    //לא עובד טוב. צריך לבדוק למה
+    /***
+     * create ray from camera to specific pixel
+     * castRay with antialiasing and with its run-time improvment - adaptive super sampling
+     * @param Nx - Pixel size in a row
+     * @param Ny -Pixel size in a column
+     * @param i -The number of pixels to move in a column
+     * @param j-The number of pixels to move in a row
+     */
     private void castRayImprovedAntialising(int Nx, int Ny, int i, int j) {
         //improving of anti-aliasing
         int bigNy = 2 * Ny;
@@ -377,7 +315,7 @@ public class Camera {
             for (int jRow = j * 2; jRow < j * 2 + 2; jRow++) {
                 Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
                 java.awt.Color c2 = rayTracer.traceRay(ray).getColor();
-                if (Math.abs(c1.getBlue() - c2.getBlue()) > 10 && Math.abs(c1.getGreen() - c2.getGreen()) > 10 && Math.abs(c1.getRed() - c2.getRed()) > 10)
+                if (Math.abs(c1.getBlue() - c2.getBlue()) > 5 && Math.abs(c1.getGreen() - c2.getGreen()) > 5 && Math.abs(c1.getRed() - c2.getRed()) > 5)
                     pixelColor = pixelColor.add(castRayHelp(Nx, Ny, iColumn, jRow, rayTracer.traceRay(ray)));
                 else
                     pixelColor = pixelColor.add(rayTracer.traceRay(ray));
@@ -387,6 +325,28 @@ public class Camera {
         imageWriter.writePixel(j, i, pixelColor);
     }
 
+
+    /***
+     * create ray from camera to specific pixel
+     * castRay without antialiasing
+     * @param Nx - Pixel size in a row
+     * @param Ny -Pixel size in a column
+     * @param i -The number of pixels to move in a column
+     * @param j-The number of pixels to move in a row
+     */
+    private void castRaySimple(int Nx, int Ny, int i, int j) {
+        Ray ray = constructRay(Nx, Ny, j, i);
+        Color pixelColor = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, pixelColor);
+    }
+
+    /***
+     * help function to castRay
+     * @param Nx - Pixel size in a row
+     * @param Ny -Pixel size in a column
+     * @param i -The number of pixels to move in a column
+     * @param j-The number of pixels to move in a row
+     */
     private Color castRayHelp(int Nx, int Ny, int i, int j, Color pixelColor) {
         int bigNy = 2 * Ny;
         int bigNx = 2 * Nx;
@@ -406,13 +366,6 @@ public class Camera {
         return pixelColor;
     }
 
-    //בלי שיפורים של תצוגה וריצה
-    private void castRaySimple(int Nx, int Ny, int i, int j) {
-        Ray ray = constructRay(Nx, Ny, j, i);
-        Color pixelColor = rayTracer.traceRay(ray);
-        imageWriter.writePixel(j, i, pixelColor);
-    }
-
     public Camera writeToImage() {
         imageWriter.writeToImage();
         return this;
@@ -424,35 +377,11 @@ public class Camera {
         imageWriter.printGrid(interval, color);
     }
 
-    //דברים מהגיט
-
-
-    /**
-     * Construct ray through nthe center of a pixel when we have only the bottom right corner's ray
-     *
-     * @param ray the ray
-     * @param nX  number of pixel in width
-     * @param nY  number of pixels in height
-     * @return center's ray
-     */
-    public Ray constructPixelCenterRay(Ray ray, double nX, double nY) {
-
-        //Ry = h / nY - pixel height ratio
-        double height = alignZero(this.height / nY);
-        //Rx = h / nX - pixel width ratio
-        double width = alignZero(this.width / nX);
-
-
-        Point point = getPointOnViewPlane(ray);
-        point = point.add(vRight.scale(width / 2)).add(vUp.scale(-height / 2));
-        return new Ray(place, point.subtract(place));
-    }
 
     /**
      * Function to find a specific point on the plane
      * we need to calculate the distance from the point on the camera to the plane
      * for that we use the cos of the angle of the direction ray with vTo vector
-     *
      * @param r ray to the specific point
      * @return the distance to the point
      */
@@ -460,196 +389,6 @@ public class Camera {
         double t0 = distance;
         double t = t0 / (vTo.dotProduct(r.getDir())); //cosinus of the angle
         return r.getPoint(t);
-    }
-
-    /**
-     * Function that gets a pixel's center ray and constructs a list of 5 rays from that ray,
-     * one at each corner of the pixel and one in the center
-     *
-     * @param myRay the center's ray
-     * @param nX    number of pixel in width
-     * @param nY    number of pixels in height
-     * @return list of rays
-     */
-    public List<Ray> construct5RaysFromRay(Ray myRay, double nX, double nY) {
-
-        List<Ray> myRays = new LinkedList<>();
-
-        //Ry = h / nY - pixel height ratio
-        double rY = alignZero(height / nY);
-        //Rx = h / nX - pixel width ratio
-        double rX = alignZero(width / nX);
-
-
-        Point center = getPointOnViewPlane(myRay);
-
-        //[-1/2, -1/2]
-        myRays.add(new Ray(place, center.add(vRight.scale(-rX / 2)).add(vUp.scale(rY / 2)).subtract(place)));
-        //[1/2, -1/2]
-        myRays.add(new Ray(place, center.add(vRight.scale(rX / 2)).add(vUp.scale(rY / 2)).subtract(place)));
-
-        myRays.add(myRay);
-        //[-1/2, 1/2]
-        myRays.add(new Ray(place, center.add(vRight.scale(-rX / 2)).add(vUp.scale(-rY / 2)).subtract(place)));
-        //[1/2, 1/2]
-        myRays.add(new Ray(place, center.add(vRight.scale(rX / 2)).add(vUp.scale(-rY / 2)).subtract(place)));
-        return myRays;
-    }
-
-    /**
-     * Function that returns a list of 4 rays in a pixel
-     * one on the top upper the center point
-     * one on the left of the center
-     * one on the right of the center
-     * one on the bottom of the center
-     *
-     * @param ray the center's ray
-     * @param nX  number of pixel in width
-     * @param nY  number of pixels in height
-     * @return list of rays
-     */
-    public List<Ray> construct4RaysThroughPixel(Ray ray, double nX, double nY) {
-
-        //Ry = h / nY - pixel height ratio
-        double height = alignZero(this.height / nY);
-        //Rx = h / nX - pixel width ratio
-        double width = alignZero(this.width / nX);
-
-        List<Ray> myRays = new ArrayList<>();
-        Point center = getPointOnViewPlane(ray);
-
-
-        Point point1 = center.add(vUp.scale(height / 2));
-        Point point2 = center.add(vRight.scale(-width / 2));
-        Point point3 = center.add(vRight.scale(width / 2));
-        Point point4 = center.add(vUp.scale(-height / 2));
-        myRays.add(new Ray(place, point1.subtract(place)));
-        myRays.add(new Ray(place, point2.subtract(place)));
-        myRays.add(new Ray(place, point3.subtract(place)));
-        myRays.add(new Ray(place, point4.subtract(place)));
-        return myRays;
-    }
-
-
-    public Ray constructRayThroughPixel(int nX, int nY, double j, double i) {
-
-        //Pc = P0 + d * vTo
-        Point pc = place.add(vTo.scale(distance));
-        Point pIJ = pc;
-
-        //Ry = height / nY : height of a pixel
-        double rY = alignZero(height / nY);
-        //Ry = weight / nX : width of a pixel
-        double rX = alignZero(width / nX);
-        //xJ is the value of width we need to move from center to get to the point
-        double xJ = alignZero((j - ((nX - 1) / 2d)) * rX);
-        //yI is the value of height we need to move from center to get to the point
-        double yI = alignZero(-(i - ((nY - 1) / 2d)) * rY);
-
-        if (xJ != 0) {
-            pIJ = pIJ.add(vRight.scale(xJ)); // move to the point
-        }
-        if (yI != 0) {
-            pIJ = pIJ.add(vUp.scale(yI)); // move to the point
-        }
-
-        //get vector from camera p0 to the point
-        Vector vIJ = pIJ.subtract(place);
-
-        //return ray to the center of the pixel
-        return new Ray(place, vIJ);
-
-    }
-
-    /**
-     * This function get a ray launched in the center of a pixel and launch a beam n * m others rays
-     * on the same pixel
-     *
-     * @param nX  number of pixels in a row of view plane
-     * @param nY  number of pixels in a column of view plane
-     * @param n   number of the rays to launch in pixel
-     * @param m   number of the ray to launch in the pixel
-     * @param ray the ray that it is already launched in the center of the pixel
-     * @return list of rays when every ray is launched inside a pixel with random emplacement
-     */
-    public List<Ray> constructRaysGridFromRay(int nX, int nY, int n, int m, Ray ray) {
-
-        Point p0 = ray.getPoint(distance); //center of the pixel
-        List<Ray> myRays = new LinkedList<>(); //to save all the rays
-
-        double pixelHeight = alignZero(height / nY);
-        double pixelHWidth = alignZero(width / nX);
-
-        //We call the function constructRayThroughPixel like we used to but this time we launch m * n ray in the same pixel
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                myRays.add(constructRayThroughPixel(m, n, j, i, pixelHeight, pixelHWidth, p0));
-            }
-        }
-
-        return myRays;
-    }
-
-    /**
-     * The function constructs a ray from Camera location through a point (i,j) on the grid of a
-     * pixel in the view plane
-     *
-     * @param m      grid's height
-     * @param n      grid's width
-     * @param j      number of the pixel in the row
-     * @param i      number of the pixel in the column
-     * @param pixelH height of the pixel
-     * @param pixelW width of the pixel
-     * @param pc     pixel center
-     * @return the ray through pixel's center
-     */
-    private Ray constructRayThroughPixel(int m, int n, double j, double i, double pixelH, double pixelW, Point pc) {
-
-        Point pIJ = pc;
-
-        //Ry = height / nY : height of a pixel
-        double rY = pixelH / n;
-        //Ry = weight / nX : width of a pixel
-        double rX = pixelW / m;
-        //xJ is the value of width we need to move from center to get to the point
-        //we get to the bottom/top of the pixel and then we move randomly in the pixel to get the point
-        double xJ = ((j + r.nextDouble() / (r.nextBoolean() ? 2 : -2)) - ((m - 1) / 2d)) * rX;
-        //yI is the value of height we need to move from center to get to the point
-        //we get to the side of the pixel and then we move randomly in the pixel to get the point
-        double yI = -((i + r.nextDouble() / (r.nextBoolean() ? 2 : -2)) - ((n - 1) / 2d)) * rY;
-
-        if (xJ != 0) {
-            pIJ = pIJ.add(vRight.scale(xJ));
-        }
-        if (yI != 0) {
-            pIJ = pIJ.add(vUp.scale(yI));
-        }
-
-        //get vector from camera p0 to the point
-        Vector vIJ = pIJ.subtract(place);
-
-        //return ray to the center of the pixel
-        return new Ray(place, vIJ);
-
-    }
-
-    //פונקציה ראשית
-    private void renderImageWithAntialiasing() {
-        if (_N == 0 || _M == 0)
-            throw new MissingResourceException("You need to set the n*m value for the rays launching", RayTracerBasic.class.getName(), "");
-
-        for (int i = 0; i < imageWriter.getNy(); i++) {
-            for (int j = 0; j < imageWriter.getNx(); j++) {
-                Ray myRay = constructRayThroughPixel(imageWriter.getNx(), imageWriter.getNy(), j, i);
-                List<Ray> myRays = constructRaysGridFromRay(imageWriter.getNx(), imageWriter.getNy(), _N, _M, myRay);
-                Color myColor = new Color(0, 0, 0);
-                for (Ray ray : myRays) {
-                    myColor = myColor.add(rayTracer.traceRay(ray));
-                }
-                imageWriter.writePixel(j, i, myColor.reduce(_N * _M));
-            }
-        }
     }
 
 }

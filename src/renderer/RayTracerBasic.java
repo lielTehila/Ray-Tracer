@@ -155,10 +155,10 @@ public class RayTracerBasic extends RayTracer {
             double nl = alignZero(n.dotProduct(l));
             if (nl * nv > 0) {
                 Double3 ktr;
-                if (Camera.softShadows) {
-                    ktr = transparencyWithSoftShadows(gp, lightSource, l);// with soft shadow
-                } else {
-                    ktr = transparency(gp, lightSource, l, n);// without soft shadow
+                if (Camera.softShadows) {  //build picture with soft shadows improve
+                    ktr = transparencyWithSoftShadows(gp, lightSource, l);
+                } else {  //build picture without soft shadows improve
+                    ktr = transparency(gp, lightSource, l, n);
                 }
                 if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
                     //if(unshaded(lightSource,l,n,gp)) {
@@ -175,7 +175,6 @@ public class RayTracerBasic extends RayTracer {
 
     /**
      * Calculates the shadow.
-     *
      * @param geoPoint    point of geometry.
      * @param lightSource the light object.
      * @param l           vector of the direction of the light.
@@ -205,7 +204,6 @@ public class RayTracerBasic extends RayTracer {
 
     /**
      * Match to soft shadow
-     *
      * @param geoPoint    point of geometry
      * @param lightSource the light object
      * @param n           normal to the geo point
@@ -213,7 +211,7 @@ public class RayTracerBasic extends RayTracer {
      */
     private Double3 transparencyWithSoftShadows(GeoPoint geoPoint, LightSource lightSource, Vector n) {
         Double3 ktr;
-        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 5, 5);
+        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 10, 10);
         Double3 tempKtr = Double3.ZERO;
         for (Vector vl : beamL) {
             tempKtr = tempKtr.add(transparency(geoPoint, lightSource, vl, n));
@@ -226,7 +224,6 @@ public class RayTracerBasic extends RayTracer {
 
     /**
      * Checking for shading between a point and the light source //geometric point being examined for non-shading between the point and the light source
-     *
      * @param light
      * @param l
      * @param n
@@ -254,7 +251,6 @@ public class RayTracerBasic extends RayTracer {
 
     /**
      * calc the diffusive light effect on the specific point
-     *
      * @param material the contain the attenuation and shininess factors
      * @param nl       dot-product n*l
      * @return double3 of the diffusive factor
@@ -267,7 +263,6 @@ public class RayTracerBasic extends RayTracer {
 
     /**
      * calc the specular light effect on the specific point
-     *
      * @param material the contain the attenuation and shininess factors
      * @param n        normal to surface at the point
      * @param l        direction from light to point
@@ -291,12 +286,10 @@ public class RayTracerBasic extends RayTracer {
 
     /**
      * find the closest geo point
-     *
      * @param ray the ray that create intersection points
      * @return closest geo point
      */
     private GeoPoint findClosestIntersection(Ray ray) {
-
         List<GeoPoint> intersections = scene.getGeometries().findGeoIntersections(ray);
         if (intersections == null)
             return null;

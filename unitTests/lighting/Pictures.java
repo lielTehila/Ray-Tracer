@@ -28,13 +28,13 @@ public class Pictures {
                 .setBackground(new Color(171, 255, 255))
                 .build();
         //regular
-        Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
-                .setVPSize(200, 200) //
-                .setVPDistance(800);
-        //look from side
-//        Camera camera = new Camera(new Point(-70, 30, 1200), new Vector(1, 0, -12), new Vector(0, 1, 0)) //
+//        Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 //                .setVPSize(200, 200) //
 //                .setVPDistance(800);
+//        //look from side
+        Camera camera = new Camera(new Point(-70, 30, 1200), new Vector(1, 0, -12), new Vector(0, 1, 0)) //
+                .setVPSize(200, 200) //
+                .setVPDistance(800);
         //close to the mirror
 //        Camera camera = new Camera(new Point(0, 0, 600), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 //                .setVPSize(200, 200) //
@@ -44,36 +44,27 @@ public class Pictures {
         Geometry floor = new Plane(new Point(0, -50, 0), new Vector(0, 1, 0)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(255, 195, 96));
 
-//        Geometry rightWall = new Plane(new Point(90, 0, 0), new Vector(1, 0, 0)).setMaterial(new Material().setkD(0.6))
-//                .setEmission(new Color(RED).reduce(1.2));
         Geometry rightWallTri1 = new Triangle(new Point(90,-50,-500),new Point(90,100,-500),new Point(90,-50,1300))
                 .setEmission(new Color(RED).reduce(1.2));
         Geometry rightWallTri2 = new Triangle(new Point(90,100,1300),new Point(90,100,-500),new Point(90,-50,1300))
                 .setEmission(new Color(RED).reduce(1.2));
 
-//        Geometry frontMirrorWall = new Plane(new Point(0, 0, -500), new Vector(0, 0, 1)).setMaterial(new Material().setKr(0.8).setkD(0.1))
-//                .setEmission(new Color(BLACK));
-        Geometry frontMirrorWallTri1 = new Triangle(new Point(-90,-50,-500),new Point(-90,100,-500),new Point(90,-50,-500))
+        Geometry frontMirrorWallTri1 = new Triangle(new Point(-92,-52,-500),new Point(-92,102,-500),new Point(91,-51,-500))
                 .setMaterial(new Material().setKr(0.8).setkD(0.1)).setEmission(new Color(BLACK));
-        Geometry frontMirrorWallTri2 = new Triangle(new Point(90,100,-500),new Point(-90,100,-500),new Point(90,-50,-500))
+        Geometry frontMirrorWallTri2 = new Triangle(new Point(92,102,-500),new Point(-92,102,-500),new Point(91,-51,-500))
                 .setMaterial(new Material().setKr(0.8).setkD(0.1)).setEmission(new Color(BLACK));
 
-//        Geometry ceil = new Plane(new Point(0, 100, 0), new Vector(0, 1, 0)).setMaterial(new Material().setkD(1))
-//                .setEmission(new Color(255, 195, 96));
         Geometry ceilTri1 = new Triangle(new Point(-90, 100, -500), new Point(90, 100, -500), new Point(-90, 100, 1300)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(255, 195, 96));
         Geometry ceilTri2 = new Triangle(new Point(90, 100, 1300), new Point(90, 100, -501), new Point(-91, 100, 1300)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(255, 195, 96));
 
-//        Geometry besideWall = new Plane(new Point(0, 0, 1300), new Vector(0, 0, 1)).setMaterial(new Material().setkD(1))
-//                .setEmission(new Color(255, 195, 96));
         Geometry besideWallTri1 = new Triangle(new Point(-90, 100, 1300), new Point(-90, -50, 1300), new Point(90, 100, 1300)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(255, 195, 96));
         Geometry besideWallTri2 = new Triangle(new Point(90, -50, 1300), new Point(-90, -50, 1300), new Point(90, 100, 1300)).setMaterial(new Material().setkD(1))
                 .setEmission(new Color(255, 195, 96));
 
-//        Geometry leftWall = new Plane(new Point(-90, 0, 0), new Vector(1, 0, 0)).setMaterial(new Material().setkD(0.6))
-//                .setEmission(new Color(RED).reduce(1.2));
+
         Geometry trWallR1 = new Triangle(new Point(-90, 100, -500), new Point(-90, -50, -500), new Point(-90, 100, 50)).setEmission(new Color(RED).reduce(1.2));
         Geometry trWallR2 = new Triangle(new Point(-90, 100, 50), new Point(-90, -50, 50), new Point(-90, -50, -500)).setEmission(new Color(RED).reduce(1.2));
         Geometry trWallL1 = new Triangle(new Point(-90, 100, 250), new Point(-90, -50, 250), new Point(-90, 100, 1300)).setEmission(new Color(RED).reduce(1.2));
@@ -149,32 +140,30 @@ public class Pictures {
 
         //adding the shapes to the scene
         scene.getGeometries().add(
-                floor, ceilTri1, ceilTri2, besideWallTri1, besideWallTri2, trWallR1, trWallR2, trWallL1, trWallL2, trDoor1,
-                trDoor2, trUpDoor1, trUpDoor2,rightWallTri1,rightWallTri2,frontMirrorWallTri1,frontMirrorWallTri2);
+                frontMirrorWallTri1,frontMirrorWallTri2,floor, ceilTri1, ceilTri2, besideWallTri1, besideWallTri2, trWallR1, trWallR2, trWallL1, trWallL2, trDoor1,
+                trDoor2, trUpDoor1, trUpDoor2,rightWallTri1,rightWallTri2);
         scene.getGeometries().add(blueSphere, orangeSphere3, pinkSphere3, lightBlueSphere, brownSphere2,
                 blackSphere2, pinkSphere, greenSphere, greenSphere2, pinkSphere2, purpleSphere,
                 orangeSphere, blackSphere, brownSphere);
         scene.getGeometries().add( Lamp1, Lamp2, Lamp3, Lamp4, Lamp5, Lamp6);
-
+        scene.getGeometries().add(orangeSphere);
 
         //adding the lights to the scene
-  //      scene.getLights().add(new PointLight(new Color(WHITE), new Point(0, 50, 1200)).setKl(0.0001).setKq(0.0005));
-
         scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, -200), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
-//        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 400), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
+        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 400), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
         scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 1000), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
-//        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, -200), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
+        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, -200), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
         scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, 400), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
-//        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, 1000), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
+        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, 1000), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
 
         scene.getLights().add(new DirectionalLight(new Color(YELLOW), new Vector(1, -1, -1)));
 
 
         //render scene
-        ImageWriter imageWriter = new ImageWriter("OurProjectPictureRegular9", 500, 500);
+        ImageWriter imageWriter = new ImageWriter("OurProjectPictureFromSide", 500, 500);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
-                .renderImage() //
+                .renderImage(true,true,false,false) //
                 .writeToImage(); //
     }
 
