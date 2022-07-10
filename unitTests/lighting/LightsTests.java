@@ -85,7 +85,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightSphereSpot", 500, 500);
 		camera1.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene1)) //
-				.renderImage(true,true,true,false) //
+				.renderImage(true,true,true,true) //
 				.writeToImage(); //
 	}
 

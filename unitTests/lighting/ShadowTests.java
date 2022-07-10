@@ -37,7 +37,7 @@ public class ShadowTests {
 				new SpotLight(new Color(400, 240, 0), spotLocation, new Vector(1, 1, -3)) //
 						.setKl(1E-5).setKq(1.5E-7));
 		camera.setImageWriter(new ImageWriter(pictName, 400, 400)) //
-				.renderImage(true,true,true,false) //
+				.renderImage(true,true,true,true) //
 				.writeToImage();
 	}
 
@@ -46,15 +46,8 @@ public class ShadowTests {
 	 */
 	@Test
 	public void sphereTriangleInitial() {
-	//1 בלי כלום 4 783//
-	// 2 בלי כלום תהליכים
-	//3 תהליכים אנטיאליסטיה 8 663
-	//4 תהליכים אנטי וסופט 5 45 דקות
-	//  5 סופט שאדאו תהליכים 2 50
-	//
-	//
-	//
-		sphereTriangleHelper("shadowSphereTriangleInitial5", //
+
+		sphereTriangleHelper("shadowSphereTriangleInitial3", //
 				new Triangle(new Point(-70, -40, 0), new Point(-40, -70, 0), new Point(-68, -68, -4)), //
 				new Point(-100, -100, 200));
 	}

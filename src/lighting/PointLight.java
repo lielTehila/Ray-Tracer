@@ -130,10 +130,10 @@ public class PointLight extends Light  implements LightSource{
     {
         Random r = new Random();
         List<Vector> vectors = new LinkedList();
-        for (double i = -_radius; i < _radius; i += _radius / 10) {
-            for (double j = -_radius; j < _radius; j += _radius / 10) {
+        for (double i = -_radius; i < _radius; i += _radius / 5) {
+            for (double j = -_radius; j < _radius; j += _radius / 5) {
                 if (i != 0 && j != 0) {
-                    Point point = position.add(new Vector(i, 0.1d, j));
+                    Point point = position.add(new Vector(i, 0.2d, j));
 
                     if (point.equals(position)){
                         vectors.add(p.subtract(point).normalize());

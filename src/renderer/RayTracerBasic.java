@@ -1,8 +1,5 @@
 package renderer;
 
-import geometries.FlatGeometry;
-import geometries.Geometries;
-import geometries.Geometry;
 import lighting.LightSource;
 import primitives.*;
 import scene.Scene;
@@ -13,8 +10,6 @@ import java.util.List;
 import static primitives.Double3.ZERO;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
-
-import renderer.Camera;
 
 /**
  * The class is used for calculations related to rays.
@@ -161,7 +156,7 @@ public class RayTracerBasic extends RayTracer {
             if (nl * nv > 0) {
                 Double3 ktr;
                 if (Camera.softShadows) {
-                    ktr = transparencyBeam(gp, lightSource, l);// with soft shadow
+                    ktr = transparencyWithSoftShadows(gp, lightSource, l);// with soft shadow
                 } else {
                     ktr = transparency(gp, lightSource, l, n);// without soft shadow
                 }
@@ -216,9 +211,9 @@ public class RayTracerBasic extends RayTracer {
      * @param n           normal to the geo point
      * @return the level of the transparency
      */
-    private Double3 transparencyBeam(GeoPoint geoPoint, LightSource lightSource, Vector n) {
+    private Double3 transparencyWithSoftShadows(GeoPoint geoPoint, LightSource lightSource, Vector n) {
         Double3 ktr;
-        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 10, 10);
+        List<Vector> beamL = lightSource.getListRound(geoPoint.point, 5, 5);
         Double3 tempKtr = Double3.ZERO;
         for (Vector vl : beamL) {
             tempKtr = tempKtr.add(transparency(geoPoint, lightSource, vl, n));

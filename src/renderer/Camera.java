@@ -233,37 +233,65 @@ public class Camera {
 
         return this;
     }
-
-    /**
-     * build the image with printing the geometries and the background
-     * render with threads
-     */
-    //שיתה שניה לא עובדת טוב יותר
     public Camera renderImage() {
-
         int Nx = imageWriter.getNx();
         int Ny = imageWriter.getNy();
         Pixel.initialize(Ny, Nx, printInterval);
-        while (threadsCount-- > 0) {
-            new Thread(() -> {
-                for (Pixel pixel = new Pixel(); pixel.nextPixel(); Pixel.pixelDone())
-                {
-                    if (!antialiasing) {  //build picture without antialiasing improve
-                        castRaySimple(Nx, Ny, pixel.col, pixel.row);
-                    } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
-                        castRayImprovedAntialising(Nx, Ny, pixel.col, pixel.row);
-                    } else { //  //build picture with antialiasing improve
-                        castRayRegularAntialiasing(Nx, Ny, pixel.col, pixel.row);
-                    }
+        IntStream.range(0, Ny).parallel().forEach(i -> {
+            IntStream.range(0, Nx).parallel().forEach(j -> {
+                if (!antialiasing) {  //build picture without antialiasing improve
+                    castRaySimple(Nx, Ny, i, j);
+                    Pixel.pixelDone();
+                    Pixel.printPixel();
+                } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
+                    castRayImprovedAntialising(Nx, Ny, i, j);
+                    Pixel.pixelDone();
+                    Pixel.printPixel();
+                } else { //  //build picture with antialiasing improve
+                    castRayRegularAntialiasing(Nx, Ny, i, j);
                     Pixel.pixelDone();
                     Pixel.printPixel();
                 }
-            }).start();
-        }
-        Pixel.waitToFinish();
-        imageWriter.writeToImage();
+
+            });
+        });
         return this;
     }
+//    /**
+//     * build the image with printing the geometries and the background
+//     * render with threads
+//      אמור להדפיס אחוזים. לא עובד ויותר איטי
+//     */
+//    public Camera renderImage() {
+//
+//        int Nx = imageWriter.getNx();
+//        int Ny = imageWriter.getNy();
+//        Pixel.initialize(Ny, Nx, printInterval);
+//        while (threadsCount-- > 0) {
+//            new Thread(() -> {
+//                for (Pixel pixel = new Pixel(); pixel.nextPixel(); Pixel.pixelDone())
+//                {
+//                    if (!antialiasing) {  //build picture without antialiasing improve
+//                        castRaySimple(Nx, Ny, pixel.col, pixel.row);
+//                        Pixel.pixelDone();
+//                        Pixel.printPixel();
+//                    } else if (antialiasing && adaptiveSuperSampling) {  //build picture with antialiasing improve and run-time improve
+//                        castRayImprovedAntialising(Nx, Ny, pixel.col, pixel.row);
+//                        Pixel.pixelDone();
+//                        Pixel.printPixel();
+//                    } else { //  //build picture with antialiasing improve
+//                        castRayRegularAntialiasing(Nx, Ny, pixel.col, pixel.row);
+//                        Pixel.pixelDone();
+//                        Pixel.printPixel();
+//                    }
+//
+//                }
+//            }).start();
+//        }
+//        Pixel.waitToFinish();
+//        imageWriter.writeToImage();
+//        return this;
+//    }
 //    public Camera renderImage() {
 //
 //        int Nx = imageWriter.getNx();
@@ -349,7 +377,7 @@ public class Camera {
             for (int jRow = j * 2; jRow < j * 2 + 2; jRow++) {
                 Ray ray = constructRay(bigNx, bigNy, jRow, iColumn);
                 java.awt.Color c2 = rayTracer.traceRay(ray).getColor();
-                if (Math.abs(c1.getBlue() - c2.getBlue()) > 5 && Math.abs(c1.getGreen() - c2.getGreen()) > 5 && Math.abs(c1.getRed() - c2.getRed()) > 5)
+                if (Math.abs(c1.getBlue() - c2.getBlue()) > 10 && Math.abs(c1.getGreen() - c2.getGreen()) > 10 && Math.abs(c1.getRed() - c2.getRed()) > 10)
                     pixelColor = pixelColor.add(castRayHelp(Nx, Ny, iColumn, jRow, rayTracer.traceRay(ray)));
                 else
                     pixelColor = pixelColor.add(rayTracer.traceRay(ray));
