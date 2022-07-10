@@ -161,10 +161,10 @@ public class Pictures {
   //      scene.getLights().add(new PointLight(new Color(WHITE), new Point(0, 50, 1200)).setKl(0.0001).setKq(0.0005));
 
         scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, -200), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
-        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 400), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
-//        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 1000), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
+//        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 400), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
+        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(-88, 65, 1000), new Vector(1, -1, 0)).setKl(4E-5).setKq(2E-7));
 //        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, -200), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
-//        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, 400), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
+        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, 400), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
 //        scene.getLights().add(new SpotLight(new Color(249, 255, 195), new Point(88, 65, 1000), new Vector(-1, -1, 0)).setKl(4E-5).setKq(2E-7));
 
         scene.getLights().add(new DirectionalLight(new Color(YELLOW), new Vector(1, -1, -1)));
