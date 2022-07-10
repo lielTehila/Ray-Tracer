@@ -53,7 +53,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightSphereDirectional", 500, 500);
 		camera1.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene1)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -68,7 +68,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightSpherePoint", 500, 500);
 		camera1.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene1)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -85,7 +85,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightSphereSpot", 500, 500);
 		camera1.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene1)) //
-				.renderImage(true,true,true,true) //
+				.renderImage(true,false,false,false)//
 				.writeToImage(); //
 	}
 
@@ -104,7 +104,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesDirectional", 500, 500);
 		camera2.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene2)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -119,7 +119,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesPoint", 500, 500);
 		camera2.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene2)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -134,7 +134,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesSpot", 500, 500);
 		camera2.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene2)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -153,7 +153,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightSphereSpotSharp", 500, 500);
 		camera1.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene1)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -171,7 +171,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesSpotSharp", 500, 500);
 		camera2.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene2)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -191,7 +191,7 @@ public class LightsTests {
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesManyLights", 500, 500);
 		camera2.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene2)) //
-				.renderImage() //
+				.renderImage(true,false,false,false) //
 				.writeToImage(); //
 	}
 
@@ -204,30 +204,15 @@ public class LightsTests {
 		scene1.getLights().add(new SpotLight(spCL, spPL, new Vector(1, 1, -0.5))
 				.setKl(0.001)
 				.setKq(0.0001));
-		scene1.getLights().add(new PointLight(new Color(145,255,58), new Point(-50,-50,300)).setKl(0.001).setKq(0.0002));
-		scene1.getLights().add(new DirectionalLight(new Color(25,255,252), new Vector(13, 4, -0.5)));
-
+		scene1.getLights().add(new PointLight(new Color(145, 255, 58), new Point(-50, -50, 300)).setKl(0.001).setKq(0.0002));
+		scene1.getLights().add(new DirectionalLight(new Color(25, 255, 252), new Vector(13, 4, -0.5)));
 
 
 		ImageWriter imageWriter = new ImageWriter("lightSphereManyLights", 500, 500);
 		camera1.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene1)) //
-				.renderImage() //
+				.renderImage(true, false, false, false) //
 				.writeToImage(); //
-//		scene1.getLights().add(new SpotLight(spCL, spPL, new Vector(1, 1, -0.5)));
-//		scene1.getGeometries().add(sphere);
-//		scene1.getLights().add(new SpotLight(trCL, trPL, trDL)
-////				.setNarrowBeam(10)
-//				.setKl(0.001)
-//				.setKq(0.0001));
-//		scene1.getLights().add(new PointLight(trCL, trPL).setKl(0.001).setKq(0.0002));
-//		scene1.getLights().add(new DirectionalLight(trCL, trDL));
-//
-//		ImageWriter imageWriter = new ImageWriter("lightSphereManyLights", 500, 500);
-//		camera1.setImageWriter(imageWriter) //
-//				.setRayTracer(new RayTracerBasic(scene2)) //
-//				.renderImage() //
-//				.writeToImage(); //
-	}
 
+	}
 }

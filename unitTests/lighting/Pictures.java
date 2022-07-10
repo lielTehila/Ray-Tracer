@@ -24,17 +24,17 @@ public class Pictures {
     public void projectPicture() {
         Scene scene = new Scene.SceneBuilder("Test scene") //
                 .setAmbientLight(new AmbientLight(new Color(BLACK), new Double3(0.7)))
-                //.setBackground(new Color(184,255,154))
                 .setBackground(new Color(171, 255, 255))
                 .build();
+
         //regular
-//        Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
-//                .setVPSize(200, 200) //
-//                .setVPDistance(800);
-//        //look from side
-        Camera camera = new Camera(new Point(-70, 30, 1200), new Vector(1, 0, -12), new Vector(0, 1, 0)) //
+        Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setVPSize(200, 200) //
                 .setVPDistance(800);
+        //look from side
+//        Camera camera = new Camera(new Point(-70, 30, 1200), new Vector(1, 0, -12), new Vector(0, 1, 0)) //
+//                .setVPSize(200, 200) //
+//                .setVPDistance(800);
         //close to the mirror
 //        Camera camera = new Camera(new Point(0, 0, 600), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 //                .setVPSize(200, 200) //
@@ -160,10 +160,10 @@ public class Pictures {
 
 
         //render scene
-        ImageWriter imageWriter = new ImageWriter("OurProjectPictureFromSide", 500, 500);
+        ImageWriter imageWriter = new ImageWriter("OurProjectPicture", 500, 500);
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //
-                .renderImage(true,true,false,false) //
+                .renderImage(true,false,false,false) //
                 .writeToImage(); //
     }
 
